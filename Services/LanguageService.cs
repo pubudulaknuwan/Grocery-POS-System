@@ -580,7 +580,7 @@ namespace VillageSmartPOS.Services
                     var resourceKey = ExtractResourceKey(textBlock.Text);
                     if (!string.IsNullOrEmpty(resourceKey) && Application.Current.Resources.Contains(resourceKey))
                     {
-                        textBlock.Text = Application.Current.Resources[resourceKey] as string ?? textBlock.Text;
+                        textBlock.Text = (Application.Current.Resources[resourceKey] as string) ?? textBlock.Text;
                     }
                 }
             }
@@ -589,7 +589,7 @@ namespace VillageSmartPOS.Services
             var buttons = FindVisualChildren<System.Windows.Controls.Button>(userControl);
             foreach (var button in buttons)
             {
-                if (button.Content != null && button.Content.ToString().Contains("{DynamicResource"))
+                if (button.Content != null && button.Content.ToString()?.Contains("{DynamicResource") == true)
                 {
                     System.Diagnostics.Debug.WriteLine($"Found problematic Button: {button.Content}");
                     // Force the binding to refresh
@@ -602,10 +602,14 @@ namespace VillageSmartPOS.Services
                     button.UpdateLayout();
                     
                     // Try to directly set the content based on the resource key
-                    var resourceKey = ExtractResourceKey(button.Content.ToString());
-                    if (!string.IsNullOrEmpty(resourceKey) && Application.Current.Resources.Contains(resourceKey))
+                    var contentString = button.Content.ToString();
+                    if (contentString != null)
                     {
-                        button.Content = Application.Current.Resources[resourceKey] as string ?? button.Content;
+                        var resourceKey = ExtractResourceKey(contentString);
+                        if (!string.IsNullOrEmpty(resourceKey) && Application.Current.Resources.Contains(resourceKey))
+                        {
+                            button.Content = (Application.Current.Resources[resourceKey] as string) ?? button.Content;
+                        }
                     }
                 }
             }
@@ -619,10 +623,10 @@ namespace VillageSmartPOS.Services
             }
         }
         
-        private string ExtractResourceKey(string dynamicResourceText)
+        private string ExtractResourceKey(string? dynamicResourceText)
         {
             // Extract the resource key from {DynamicResource KeyName}
-            if (dynamicResourceText.StartsWith("{DynamicResource ") && dynamicResourceText.EndsWith("}"))
+            if (dynamicResourceText != null && dynamicResourceText.StartsWith("{DynamicResource ") && dynamicResourceText.EndsWith("}"))
             {
                 return dynamicResourceText.Substring(16, dynamicResourceText.Length - 17);
             }

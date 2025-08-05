@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using VillageSmartPOS.Helpers;
 using VillageSmartPOS.Views;
+using VillageSmartPOS.ViewModels;
 
 namespace VillageSmartPOS.ViewModels
 {
@@ -24,6 +25,7 @@ namespace VillageSmartPOS.ViewModels
         public ICommand NavigateToAddProductCommand { get; }
         public ICommand NavigateToInventoryCommand { get; }
         public ICommand NavigateToLoanCustomersCommand { get; }
+        public ICommand NavigateToTemporaryBalanceCommand { get; }
         public ICommand NavigateToSettingsCommand { get; }
 
         public MainWindowViewModel()
@@ -36,6 +38,7 @@ namespace VillageSmartPOS.ViewModels
             NavigateToAddProductCommand = new RelayCommand(ShowAddProductPage);
             NavigateToInventoryCommand = new RelayCommand(ShowInventoryPage);
             NavigateToLoanCustomersCommand = new RelayCommand(ShowLoanCustomerPage);
+            NavigateToTemporaryBalanceCommand = new RelayCommand(ShowTemporaryBalancePage);
             NavigateToSettingsCommand = new RelayCommand(ShowSettingsPage);
         }
 
@@ -59,6 +62,35 @@ namespace VillageSmartPOS.ViewModels
         private void ShowLoanCustomerPage()
         {
             CurrentView = new LoanCustomerManagementPage();
+        }
+
+        private void ShowTemporaryBalancePage()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== DEBUG: Starting ShowTemporaryBalancePage ===");
+                System.Diagnostics.Debug.WriteLine("Creating TemporaryBalancePage...");
+                
+                CurrentView = new TemporaryBalancePage();
+                System.Diagnostics.Debug.WriteLine("TemporaryBalancePage created successfully");
+                
+                System.Diagnostics.Debug.WriteLine("Creating TemporaryBalanceViewModel...");
+                CurrentView.DataContext = new TemporaryBalanceViewModel();
+                System.Diagnostics.Debug.WriteLine("TemporaryBalanceViewModel created and set as DataContext");
+                
+                System.Diagnostics.Debug.WriteLine("=== DEBUG: ShowTemporaryBalancePage completed successfully ===");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"=== ERROR in ShowTemporaryBalancePage ===");
+                System.Diagnostics.Debug.WriteLine($"Exception: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+                System.Diagnostics.Debug.WriteLine($"=== END ERROR ===");
+                
+                // Show error to user
+                System.Windows.MessageBox.Show($"Error loading Temporary Balance page: {ex.Message}", "Error", 
+                    System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
         }
 
         private void ShowSettingsPage()

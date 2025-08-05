@@ -79,6 +79,28 @@ namespace VillageSmartPOS.ViewModels
             set { searchSuggestions = value; OnPropertyChanged(); }
         }
 
+        // Manual Product Entry Properties
+        private string manualProductName = string.Empty;
+        public string ManualProductName
+        {
+            get => manualProductName;
+            set { manualProductName = value; OnPropertyChanged(); }
+        }
+
+        private string manualProductPrice = string.Empty;
+        public string ManualProductPrice
+        {
+            get => manualProductPrice;
+            set { manualProductPrice = value; OnPropertyChanged(); }
+        }
+
+        private string manualProductQuantity = "1";
+        public string ManualProductQuantity
+        {
+            get => manualProductQuantity;
+            set { manualProductQuantity = value; OnPropertyChanged(); }
+        }
+
         public ObservableCollection<BillItem> BillItems { get; set; } = new();
 
         public decimal TotalAmount => BillItems.Sum(item => item.Total);
@@ -88,6 +110,7 @@ namespace VillageSmartPOS.ViewModels
         public ICommand ClearBillCommand { get; }
         public ICommand RemoveItemCommand { get; }
         public ICommand SelectProductCommand { get; }
+        public ICommand AddManualProductCommand { get; }
 
         public SalesBillingViewModel()
         {
@@ -96,6 +119,7 @@ namespace VillageSmartPOS.ViewModels
             ClearBillCommand = new RelayCommand(ClearBill, CanClearBill);
             RemoveItemCommand = new RelayCommand<BillItem>(RemoveItem);
             SelectProductCommand = new RelayCommand<Product>(SelectProduct);
+            AddManualProductCommand = new RelayCommand(AddManualProduct, CanAddManualProduct);
             
             // Add some test data for debugging
             //AddTestData();
@@ -191,7 +215,7 @@ namespace VillageSmartPOS.ViewModels
                 {
                     Name = product.Name,
                     Barcode = product.Barcode,
-                    Price = product.Price,
+                    Price = Price, // Use the current Price (which could be modified by user)
                     MarkedPrice = product.MarkedPrice,
                     Quantity = Quantity,
                     UnitType = product.UnitType,
@@ -302,6 +326,62 @@ namespace VillageSmartPOS.ViewModels
 
             OnPropertyChanged(nameof(BillItems));
             OnPropertyChanged(nameof(TotalAmount));
+        }
+
+        // Manual Product Entry Methods
+        private bool CanAddManualProduct()
+        {
+            return !string.IsNullOrWhiteSpace(ManualProductName) && 
+                   !string.IsNullOrWhiteSpace(ManualProductPrice) &&
+                   decimal.TryParse(ManualProductPrice, out decimal price) && 
+                   price > 0;
+        }
+
+        private void AddManualProduct()
+        {
+            if (!CanAddManualProduct())
+            {
+                StatusMessage = "Please enter valid product name and price";
+                return;
+            }
+
+            if (!decimal.TryParse(ManualProductPrice, out decimal price))
+            {
+                StatusMessage = "Please enter a valid price";
+                return;
+            }
+
+            if (!decimal.TryParse(ManualProductQuantity, out decimal quantity))
+            {
+                quantity = 1; // Default to 1 if invalid quantity
+            }
+
+            if (quantity <= 0)
+            {
+                quantity = 1; // Default to 1 if quantity is 0 or negative
+            }
+
+            var manualItem = new BillItem
+            {
+                Name = ManualProductName.Trim(),
+                Barcode = "", // No barcode for manual products
+                Price = price,
+                MarkedPrice = price, // Same as price for manual products
+                Quantity = quantity,
+                UnitType = "unit",
+                UnitMeasure = "pieces"
+            };
+
+            BillItems.Add(manualItem);
+            OnPropertyChanged(nameof(BillItems));
+            OnPropertyChanged(nameof(TotalAmount));
+
+            // Clear manual input fields
+            ManualProductName = string.Empty;
+            ManualProductPrice = string.Empty;
+            ManualProductQuantity = "1";
+
+            StatusMessage = $"Added manual product: {manualItem.Name} - Rs. {price:F2}";
         }
     }
 }

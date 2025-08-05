@@ -1,0 +1,176 @@
+<UserControl x:Class="VillageSmartPOS.Views.TemporaryBalancePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:VillageSmartPOS.ViewModels"
+             xmlns:converters="clr-namespace:VillageSmartPOS.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="1000"
+             Background="{DynamicResource PrimaryBackground}">
+
+    <UserControl.Resources>
+        <!-- Converters -->
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="💰 Temporary Balance" FontSize="18" FontWeight="Bold" 
+                   Foreground="#2196F3" Margin="0,0,0,10"/>
+
+        <!-- Search Section -->
+        <Border Grid.Row="1" Background="{DynamicResource CardBackground}" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="🔍 Search Balances" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#666"/>
+                    <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="14" Padding="12,8" BorderThickness="1"
+                             Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                             ToolTip="Search by customer name or notes"/>
+                </StackPanel>
+                
+                <Button Grid.Column="1" Content="🔍 Search" Command="{Binding SearchCommand}"
+                        Width="100" Height="35" Margin="10,0,0,0" 
+                        Background="{DynamicResource SuccessButton}" Foreground="White"
+                        FontWeight="Bold" FontSize="13"/>
+            </Grid>
+        </Border>
+
+        <!-- Form Section -->
+        <Border Grid.Row="2" Background="{DynamicResource CardBackground}" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Section Header -->
+                <TextBlock Grid.Row="0" Text="✏️ Add/Edit Balance" FontSize="14" FontWeight="Bold" 
+                           Foreground="{DynamicResource PrimaryText}" Margin="0,0,0,10"/>
+                
+                <!-- Form Fields -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" MinWidth="200"/>
+                        <ColumnDefinition Width="*" MinWidth="120"/>
+                        <ColumnDefinition Width="2*" MinWidth="200"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Customer Name -->
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                        <TextBlock Text="Customer Name" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#666"/>
+                        <TextBox Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="14" Padding="12,8" BorderThickness="1"
+                                 Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                 ToolTip="Enter customer name"/>
+                    </StackPanel>
+
+                    <!-- Balance -->
+                    <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                        <TextBlock Text="Balance (Rs.)" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#666"/>
+                        <TextBox Text="{Binding BalanceText, UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="14" Padding="12,8" BorderThickness="1"
+                                 Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                 ToolTip="Enter balance amount"/>
+                    </StackPanel>
+
+                    <!-- Notes -->
+                    <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                        <TextBlock Text="Notes" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#666"/>
+                        <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="14" Padding="12,8" BorderThickness="1"
+                                 Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                 ToolTip="Optional notes about the balance"/>
+                    </StackPanel>
+
+                    <!-- Action Buttons -->
+                    <StackPanel Grid.Column="3" VerticalAlignment="Bottom">
+                        <Button Content="➕ Add" 
+                                Command="{Binding AddBalanceCommand}"
+                                Width="80" Height="35" Margin="0,0,0,5"
+                                Background="{DynamicResource SuccessButton}" Foreground="White"
+                                FontWeight="Bold" FontSize="12"/>
+                        <Button Content="✏️ Update" 
+                                Command="{Binding UpdateBalanceCommand}"
+                                Width="80" Height="35" Margin="0,0,0,5"
+                                Background="{DynamicResource WarningButton}" Foreground="White"
+                                FontWeight="Bold" FontSize="12"/>
+                        <Button Content="🗑️ Delete" 
+                                Command="{Binding DeleteBalanceCommand}"
+                                Width="80" Height="35" Margin="0,0,0,5"
+                                Background="{DynamicResource DangerButton}" Foreground="White"
+                                FontWeight="Bold" FontSize="12"/>
+                        <Button Content="🔄 Clear" 
+                                Command="{Binding ClearFormCommand}"
+                                Width="80" Height="35"
+                                Background="{DynamicResource SecondaryText}" Foreground="White"
+                                FontWeight="Bold" FontSize="12"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Status Message -->
+        <Border Grid.Row="3" Background="{DynamicResource PrimaryButton}" BorderBrush="{DynamicResource PrimaryButton}" BorderThickness="1" 
+                CornerRadius="6" Margin="0,0,0,10" Padding="8,6" 
+                Visibility="{Binding StatusMessage, Converter={StaticResource StringToVisibilityConverter}}">
+            <TextBlock Text="{Binding StatusMessage}" 
+                       Foreground="White" 
+                       FontWeight="SemiBold"
+                       TextWrapping="Wrap"/>
+        </Border>
+
+        <!-- Balances DataGrid -->
+        <Grid Grid.Row="4" Margin="0,0,0,20" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="📋 Temporary Balances" 
+                       FontSize="16" FontWeight="Bold" 
+                       Foreground="{DynamicResource PrimaryText}" 
+                       Margin="0,0,0,10"/>
+
+            <DataGrid Grid.Row="1" 
+                      ItemsSource="{Binding Balances}"
+                      SelectedItem="{Binding SelectedBalance}"
+                      VerticalAlignment="Stretch"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserReorderColumns="True"
+                      CanUserResizeColumns="True"
+                      CanUserResizeRows="False"
+                      CanUserSortColumns="True"
+                      GridLinesVisibility="Horizontal"
+                      HeadersVisibility="Column"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Customer Name" Binding="{Binding CustomerName}" Width="2*"/>
+                    <DataGridTextColumn Header="Balance" Binding="{Binding FormattedBalance, Mode=OneWay}" Width="1*"/>
+                    <DataGridTextColumn Header="Created" Binding="{Binding FormattedCreatedAt, Mode=OneWay}" Width="1.5*"/>
+                    <DataGridTextColumn Header="Updated" Binding="{Binding FormattedUpdatedAt, Mode=OneWay}" Width="1.5*"/>
+                    <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="2*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</UserControl> 

@@ -36,11 +36,11 @@ namespace VillageSmartPOS.Views
                 e.Handled = true; // Prevent default Enter behavior
                 
                 // Get the current control that triggered the event
-                Control currentControl = sender as Control;
+                Control? currentControl = sender as Control;
                 if (currentControl == null) return;
 
                 // Define the navigation order for the form fields
-                Control nextControl = GetNextControl(currentControl);
+                Control? nextControl = GetNextControl(currentControl);
                 
                 if (nextControl != null)
                 {
@@ -64,7 +64,7 @@ namespace VillageSmartPOS.Views
         /// <summary>
         /// Determines the next control in the navigation order
         /// </summary>
-        private Control GetNextControl(Control currentControl)
+        private Control? GetNextControl(Control currentControl)
         {
             // Define the navigation order (left to right, top to bottom)
             var navigationOrder = new List<Control>
@@ -109,7 +109,7 @@ namespace VillageSmartPOS.Views
         /// <summary>
         /// Helper method to find a visual child by name
         /// </summary>
-        private T FindVisualChild<T>(DependencyObject parent, string name) where T : DependencyObject
+        private T? FindVisualChild<T>(DependencyObject parent, string name) where T : DependencyObject
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
             {

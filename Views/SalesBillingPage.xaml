@@ -367,6 +367,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -456,10 +457,10 @@
                 <TextBlock Text="{DynamicResource Price}" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="{DynamicResource SecondaryText}"/>
                 <TextBox Style="{StaticResource SimpleTextBox}"
                          Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}"
-                         ToolTip="Product price"
+                         ToolTip="Product price (can be modified for special pricing)"
                          FontSize="16"
                          Height="45"
-                         IsReadOnly="True"/>
+                         IsReadOnly="False"/>
             </StackPanel>
 
             <StackPanel Grid.Column="3" VerticalAlignment="Bottom">
@@ -472,8 +473,80 @@
             </StackPanel>
         </Grid>
 
+        <!-- Manual Product Entry Section -->
+        <Border Grid.Row="2" Background="{DynamicResource CardBackground}" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Section Header -->
+                <TextBlock Grid.Row="0" Text="✏️ Manual Product Entry" FontSize="14" FontWeight="Bold" 
+                           Foreground="{DynamicResource PrimaryText}" Margin="0,0,0,10"/>
+                
+                <!-- Manual Entry Fields -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" MinWidth="200"/>
+                        <ColumnDefinition Width="*" MinWidth="120"/>
+                        <ColumnDefinition Width="*" MinWidth="100"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Product Name -->
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                        <TextBlock Text="Product Name" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#666"/>
+                        <TextBox Style="{StaticResource SimpleTextBox}"
+                                 Text="{Binding ManualProductName, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="Enter product name manually"
+                                 FontSize="14"
+                                 Height="40"
+                                 x:Name="ManualProductNameTextBox"
+                                 KeyDown="ManualProductNameTextBox_KeyDown"/>
+                    </StackPanel>
+
+                    <!-- Price -->
+                    <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                        <TextBlock Text="Price (Rs.)" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#666"/>
+                        <TextBox Style="{StaticResource SimpleTextBox}"
+                                 Text="{Binding ManualProductPrice, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="Enter price manually"
+                                 FontSize="14"
+                                 Height="40"
+                                 x:Name="ManualProductPriceTextBox"
+                                 KeyDown="ManualProductPriceTextBox_KeyDown"/>
+                    </StackPanel>
+
+                    <!-- Quantity -->
+                    <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                        <TextBlock Text="Quantity" FontWeight="SemiBold" Margin="0,0,0,5" Foreground="#666"/>
+                        <TextBox Style="{StaticResource SimpleTextBox}"
+                                 Text="{Binding ManualProductQuantity, UpdateSourceTrigger=PropertyChanged}"
+                                 ToolTip="Enter quantity (default: 1)"
+                                 FontSize="14"
+                                 Height="40"
+                                 x:Name="ManualProductQuantityTextBox"
+                                 KeyDown="ManualProductQuantityTextBox_KeyDown"/>
+                    </StackPanel>
+
+                    <!-- Add Button -->
+                    <StackPanel Grid.Column="3" VerticalAlignment="Bottom">
+                        <Button Content="Add Manual" 
+                                Style="{StaticResource BillSummaryButton}"
+                                Background="{DynamicResource InfoButton}"
+                                Command="{Binding AddManualProductCommand}"
+                                Height="40"
+                                Width="100"
+                                x:Name="AddManualProductButton"
+                                KeyDown="AddManualProductButton_KeyDown"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+
         <!-- Status Message -->
-        <Border Grid.Row="2" Background="{DynamicResource PrimaryButton}" BorderBrush="{DynamicResource PrimaryButton}" BorderThickness="1" 
+        <Border Grid.Row="3" Background="{DynamicResource PrimaryButton}" BorderBrush="{DynamicResource PrimaryButton}" BorderThickness="1" 
                 CornerRadius="6" Margin="0,0,0,10" Padding="8,6" 
                 Visibility="{Binding StatusMessage, Converter={StaticResource StringToVisibilityConverter}}">
             <TextBlock Text="{Binding StatusMessage}" 
@@ -483,7 +556,7 @@
         </Border>
 
         <!-- Bill Items DataGrid -->
-        <Grid Grid.Row="3" Margin="0,0,0,20" VerticalAlignment="Stretch">
+        <Grid Grid.Row="4" Margin="0,0,0,20" VerticalAlignment="Stretch">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
@@ -525,7 +598,7 @@
         </Grid>
 
         <!-- Bill Summary and Action Buttons -->
-        <Border Grid.Row="4" Background="{DynamicResource SecondaryBackground}" CornerRadius="8" Padding="20">
+        <Border Grid.Row="5" Background="{DynamicResource SecondaryBackground}" CornerRadius="8" Padding="20">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

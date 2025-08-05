@@ -22,7 +22,16 @@ namespace VillageSmartPOS.ViewModels
         public Product? SelectedProduct
         {
             get => selectedProduct;
-            set { selectedProduct = value; OnPropertyChanged(); }
+            set 
+            { 
+                selectedProduct = value; 
+                OnPropertyChanged();
+                // Automatically load details when a product is selected
+                if (selectedProduct != null)
+                {
+                    LoadProductDetails();
+                }
+            }
         }
 
         // Product details for editing
@@ -87,6 +96,20 @@ namespace VillageSmartPOS.ViewModels
         {
             get => productReorderLevel;
             set { productReorderLevel = value; OnPropertyChanged(); }
+        }
+
+        private string productUnitType = "unit";
+        public string ProductUnitType
+        {
+            get => productUnitType;
+            set { productUnitType = value; OnPropertyChanged(); }
+        }
+
+        private string productUnitMeasure = "pieces";
+        public string ProductUnitMeasure
+        {
+            get => productUnitMeasure;
+            set { productUnitMeasure = value; OnPropertyChanged(); }
         }
 
         // Collections
@@ -192,6 +215,8 @@ namespace VillageSmartPOS.ViewModels
                 ProductSupplier = SelectedProduct.Supplier;
                 ProductDescription = SelectedProduct.Description;
                 ProductReorderLevel = SelectedProduct.ReorderLevel;
+                ProductUnitType = SelectedProduct.UnitType;
+                ProductUnitMeasure = SelectedProduct.UnitMeasure;
             }
             catch (Exception ex)
             {
@@ -210,7 +235,8 @@ namespace VillageSmartPOS.ViewModels
 
                 // Update database
                 dbService.UpdateProduct(SelectedProduct.Id, ProductName, ProductBarcode, ProductPrice, 
-                                     ProductMarkedPrice, ProductQuantity, ProductCategory, ProductSupplier, ProductDescription);
+                                     ProductMarkedPrice, ProductQuantity, ProductCategory, ProductSupplier, ProductDescription,
+                                     ProductUnitType, ProductUnitMeasure);
                 
                 // Simple reload without complex notifications
                 LoadProducts();
@@ -257,6 +283,8 @@ namespace VillageSmartPOS.ViewModels
             ProductSupplier = string.Empty;
             ProductDescription = string.Empty;
             ProductReorderLevel = 10;
+            ProductUnitType = "unit";
+            ProductUnitMeasure = "pieces";
             SelectedProduct = null;
         }
 

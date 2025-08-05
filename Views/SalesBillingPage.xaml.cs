@@ -314,5 +314,49 @@ namespace VillageSmartPOS.Views
         }
 
         private SalesBillingViewModel? viewModel => DataContext as SalesBillingViewModel;
+
+        // Manual Product Entry Event Handlers
+        private void ManualProductNameTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ManualProductPriceTextBox.Focus();
+                ManualProductPriceTextBox.SelectAll();
+                e.Handled = true;
+            }
+        }
+
+        private void ManualProductPriceTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                ManualProductQuantityTextBox.Focus();
+                ManualProductQuantityTextBox.SelectAll();
+                e.Handled = true;
+            }
+        }
+
+        private void ManualProductQuantityTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                AddManualProductButton.Focus();
+                e.Handled = true;
+            }
+        }
+
+        private void AddManualProductButton_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (viewModel != null && viewModel.AddManualProductCommand.CanExecute(null))
+                {
+                    viewModel.AddManualProductCommand.Execute(null);
+                    // Clear fields and focus back to product name
+                    ManualProductNameTextBox.Focus();
+                }
+                e.Handled = true;
+            }
+        }
     }
 }

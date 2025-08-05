@@ -91,7 +91,7 @@ namespace VillageSmartPOS.Services
             }
         }
 
-        public void UpdateProduct(int productId, string name, string barcode, decimal price, decimal markedPrice, int quantity, string category, string supplier, string description)
+        public void UpdateProduct(int productId, string name, string barcode, decimal price, decimal markedPrice, int quantity, string category, string supplier, string description, string unitType = "unit", string unitMeasure = "pieces")
         {
             try
             {
@@ -100,7 +100,8 @@ namespace VillageSmartPOS.Services
 
                 string query = @"UPDATE products SET name = @name, barcode = @barcode, price = @price, 
                                marked_price = @markedPrice, quantity = @quantity, category = @category, 
-                               supplier = @supplier, description = @description, last_updated = CURRENT_TIMESTAMP 
+                               supplier = @supplier, description = @description, unit_type = @unitType, 
+                               unit_measure = @unitMeasure, updated_at = CURRENT_TIMESTAMP 
                                WHERE id = @id";
                 using MySqlCommand cmd = new MySqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@name", name);
@@ -111,6 +112,8 @@ namespace VillageSmartPOS.Services
                 cmd.Parameters.AddWithValue("@category", category);
                 cmd.Parameters.AddWithValue("@supplier", supplier);
                 cmd.Parameters.AddWithValue("@description", description);
+                cmd.Parameters.AddWithValue("@unitType", unitType);
+                cmd.Parameters.AddWithValue("@unitMeasure", unitMeasure);
                 cmd.Parameters.AddWithValue("@id", productId);
 
                 cmd.ExecuteNonQuery();
@@ -1017,6 +1020,202 @@ namespace VillageSmartPOS.Services
             {
                 System.Diagnostics.Debug.WriteLine($"Error initializing bill settings: {ex.Message}");
             }
+        }
+
+        // Temporary Balance Methods
+        public void AddTemporaryBalance(string customerName, decimal balance, string? notes = null)
+        {
+            try
+            {
+                using MySqlConnection conn = new MySqlConnection(connectionString);
+                conn.Open();
+
+                string query = @"INSERT INTO temporary_balances (customer_name, balance, notes) 
+                               VALUES (@customerName, @balance, @notes)";
+                using MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@customerName", customerName);
+                cmd.Parameters.AddWithValue("@balance", balance);
+                cmd.Parameters.AddWithValue("@notes", notes ?? "");
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error adding temporary balance: {ex.Message}");
+                throw;
+            }
+        }
+
+        public void UpdateTemporaryBalance(int id, string customerName, decimal balance, string? notes = null)
+        {
+            try
+            {
+                using MySqlConnection conn = new MySqlConnection(connectionString);
+                conn.Open();
+
+                string query = @"UPDATE temporary_balances 
+                               SET customer_name = @customerName, balance = @balance, notes = @notes, updated_at = CURRENT_TIMESTAMP 
+                               WHERE id = @id";
+                using MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@customerName", customerName);
+                cmd.Parameters.AddWithValue("@balance", balance);
+                cmd.Parameters.AddWithValue("@notes", notes ?? "");
+                cmd.Parameters.AddWithValue("@id", id);
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error updating temporary balance: {ex.Message}");
+                throw;
+            }
+        }
+
+        public void DeleteTemporaryBalance(int id)
+        {
+            try
+            {
+                using MySqlConnection conn = new MySqlConnection(connectionString);
+                conn.Open();
+
+                string query = "DELETE FROM temporary_balances WHERE id = @id";
+                using MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error deleting temporary balance: {ex.Message}");
+                throw;
+            }
+        }
+
+        public List<TemporaryBalance> GetAllTemporaryBalances()
+        {
+            var balances = new List<TemporaryBalance>();
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("=== DEBUG: GetAllTemporaryBalances started ===");
+                using MySqlConnection conn = new MySqlConnection(connectionString);
+                System.Diagnostics.Debug.WriteLine("Opening database connection...");
+                conn.Open();
+                System.Diagnostics.Debug.WriteLine("Database connection opened successfully");
+
+                string query = @"SELECT id, customer_name, balance, created_at, updated_at, notes 
+                               FROM temporary_balances 
+                               ORDER BY created_at DESC";
+                System.Diagnostics.Debug.WriteLine($"Executing query: {query}");
+                
+                using MySqlCommand cmd = new MySqlCommand(query, conn);
+                using MySqlDataReader reader = cmd.ExecuteReader();
+                System.Diagnostics.Debug.WriteLine("Query executed successfully, reading results...");
+
+                while (reader.Read())
+                {
+                    try
+                    {
+                        var balance = new TemporaryBalance
+                        {
+                            Id = reader.GetInt32("id"),
+                            CustomerName = reader.GetString("customer_name"),
+                            Balance = reader.GetDecimal("balance"),
+                            CreatedAt = reader.GetDateTime("created_at"),
+                            UpdatedAt = reader.GetDateTime("updated_at"),
+                            Notes = reader.IsDBNull("notes") ? null : reader.GetString("notes")
+                        };
+                        balances.Add(balance);
+                        System.Diagnostics.Debug.WriteLine($"Read balance: {balance.CustomerName} - {balance.FormattedBalance}");
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"ERROR reading balance row: {ex.Message}");
+                        // Continue reading other rows instead of crashing
+                    }
+                }
+                System.Diagnostics.Debug.WriteLine($"=== DEBUG: GetAllTemporaryBalances completed - {balances.Count} balances ===");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"=== ERROR in GetAllTemporaryBalances ===");
+                System.Diagnostics.Debug.WriteLine($"Exception: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
+                System.Diagnostics.Debug.WriteLine($"=== END ERROR ===");
+                
+                // Return empty list instead of crashing
+                return new List<TemporaryBalance>();
+            }
+            return balances;
+        }
+
+        public TemporaryBalance? GetTemporaryBalanceById(int id)
+        {
+            try
+            {
+                using MySqlConnection conn = new MySqlConnection(connectionString);
+                conn.Open();
+
+                string query = @"SELECT id, customer_name, balance, created_at, updated_at, notes 
+                               FROM temporary_balances 
+                               WHERE id = @id";
+                using MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@id", id);
+                using MySqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new TemporaryBalance
+                    {
+                        Id = reader.GetInt32("id"),
+                        CustomerName = reader.GetString("customer_name"),
+                        Balance = reader.GetDecimal("balance"),
+                        CreatedAt = reader.GetDateTime("created_at"),
+                        UpdatedAt = reader.GetDateTime("updated_at"),
+                        Notes = reader.IsDBNull("notes") ? null : reader.GetString("notes")
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error getting temporary balance by ID: {ex.Message}");
+            }
+            return null;
+        }
+
+        public List<TemporaryBalance> SearchTemporaryBalances(string searchTerm)
+        {
+            var balances = new List<TemporaryBalance>();
+            try
+            {
+                using MySqlConnection conn = new MySqlConnection(connectionString);
+                conn.Open();
+
+                string query = @"SELECT id, customer_name, balance, created_at, updated_at, notes 
+                               FROM temporary_balances 
+                               WHERE customer_name LIKE @searchTerm OR notes LIKE @searchTerm
+                               ORDER BY created_at DESC";
+                using MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@searchTerm", $"%{searchTerm}%");
+                using MySqlDataReader reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    balances.Add(new TemporaryBalance
+                    {
+                        Id = reader.GetInt32("id"),
+                        CustomerName = reader.GetString("customer_name"),
+                        Balance = reader.GetDecimal("balance"),
+                        CreatedAt = reader.GetDateTime("created_at"),
+                        UpdatedAt = reader.GetDateTime("updated_at"),
+                        Notes = reader.IsDBNull("notes") ? null : reader.GetString("notes")
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error searching temporary balances: {ex.Message}");
+            }
+            return balances;
         }
     }
 }

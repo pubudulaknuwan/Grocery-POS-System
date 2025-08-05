@@ -212,6 +212,13 @@
                                 Command="{Binding NavigateToLoanCustomersCommand}"
                                 Margin="2"/>
 
+                        <!-- Temporary Balance Button -->
+                        <Button Content="Temporary Balance" 
+                                Tag="💰"
+                                Style="{StaticResource InfoSquareButton}"
+                                Command="{Binding NavigateToTemporaryBalanceCommand}"
+                                Margin="2"/>
+
                         <!-- Reports Button (Dummy) -->
                         <Button Content="{DynamicResource NavReports}" 
                                 Tag="📊"
