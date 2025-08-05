@@ -1,0 +1,324 @@
+﻿<UserControl x:Class="VillageSmartPOS.Views.AddProductPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:VillageSmartPOS.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="800"
+             Background="{DynamicResource PrimaryBackground}">
+
+    <UserControl.DataContext>
+        <vm:ProductViewModel />
+    </UserControl.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid Margin="10" MinWidth="800">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header Section -->
+            <Border Grid.Row="0" Background="{DynamicResource SuccessButton}" CornerRadius="8" Padding="15" Margin="0,0,0,15">
+                <StackPanel>
+                    <TextBlock Text="📦 Add New Product" 
+                               FontSize="20" FontWeight="Bold" 
+                               Foreground="White" HorizontalAlignment="Center"/>
+                    <TextBlock Text="Add new products to your inventory with detailed information" 
+                               FontSize="11" Foreground="White" 
+                               HorizontalAlignment="Center" Margin="0,5,0,0" Opacity="0.9"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Main Content -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" MinWidth="350" MaxWidth="500"/>
+                    <ColumnDefinition Width="2*" MinWidth="400"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Panel: Add Product Form -->
+                <Border Grid.Column="0" Background="{DynamicResource CardBackground}" CornerRadius="8" Margin="0,0,10,0" 
+                        Effect="{DynamicResource ModernCardShadow}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="15">
+                        <StackPanel>
+                            <!-- Form Title -->
+                            <StackPanel Margin="0,0,0,15" HorizontalAlignment="Center">
+                                <TextBlock Text="🛍️ Product Information" 
+                                           FontSize="16" FontWeight="Bold" 
+                                           Foreground="{DynamicResource PrimaryText}" 
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Fill in the product details below" 
+                                           FontSize="11" Foreground="{DynamicResource SecondaryText}" 
+                                           HorizontalAlignment="Center" Margin="0,3,0,0"/>
+                            </StackPanel>
+
+                            <!-- Form Fields -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- Left Column -->
+                                <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                                    <!-- Product Name -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+                                        <StackPanel>
+                                            <TextBlock Text="📝 Product Name" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <TextBox x:Name="ProductNameTextBox" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                                                     FontSize="12" Padding="8,6" BorderThickness="0"
+                                                     Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                     Style="{DynamicResource ModernTextBox}"
+                                                     KeyDown="TextBox_KeyDown"
+                                                     ToolTip="Press Enter to move to next field"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Barcode -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+                                        <StackPanel>
+                                            <TextBlock Text="🏷️ Barcode" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <TextBox x:Name="BarcodeTextBox" Text="{Binding Barcode, UpdateSourceTrigger=PropertyChanged}" 
+                                                     FontSize="12" Padding="8,6" BorderThickness="0"
+                                                     Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                     Style="{DynamicResource ModernTextBox}"
+                                                     KeyDown="TextBox_KeyDown"
+                                                     ToolTip="Press Enter to move to next field"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Our Price -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+                                        <StackPanel>
+                                            <TextBlock Text="💰 Our Price (Rs.)" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <TextBox x:Name="PriceTextBox" Text="{Binding Price, UpdateSourceTrigger=PropertyChanged}" 
+                                                     FontSize="12" Padding="8,6" BorderThickness="0"
+                                                     Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                     Style="{DynamicResource ModernTextBox}"
+                                                     KeyDown="TextBox_KeyDown"
+                                                     ToolTip="Press Enter to move to next field"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Marked Price -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+                                        <StackPanel>
+                                            <TextBlock Text="🏪 Marked Price (Rs.)" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <TextBox x:Name="MarkedPriceTextBox" Text="{Binding MarkedPrice, UpdateSourceTrigger=PropertyChanged}" 
+                                                     FontSize="12" Padding="8,6" BorderThickness="0"
+                                                     Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                     Style="{DynamicResource ModernTextBox}"
+                                                     KeyDown="TextBox_KeyDown"
+                                                     ToolTip="Press Enter to move to next field"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Quantity -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                                        <StackPanel>
+                                            <TextBlock Text="📦 Quantity" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <TextBox x:Name="QuantityTextBox" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" 
+                                                     FontSize="12" Padding="8,6" BorderThickness="0"
+                                                     Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                     Style="{DynamicResource ModernTextBox}"
+                                                     KeyDown="TextBox_KeyDown"
+                                                     ToolTip="Press Enter to move to next field"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Unit Type -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                                        <StackPanel>
+                                            <TextBlock Text="📏 Unit Type" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <ComboBox x:Name="UnitTypeComboBox" 
+                                                      FontSize="12" Padding="8,6" BorderThickness="0"
+                                                      Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                      KeyDown="TextBox_KeyDown" SelectionChanged="UnitTypeComboBox_SelectionChanged"
+                                                      ToolTip="Press Enter to move to next field">
+                                                <ComboBoxItem Content="Units (pieces/bottles)" Tag="unit"/>
+                                                <ComboBoxItem Content="Mass (kg/g)" Tag="mass"/>
+                                            </ComboBox>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Unit Measure -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,8">
+                                        <StackPanel>
+                                            <TextBlock Text="📐 Unit Measure" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <ComboBox x:Name="UnitMeasureComboBox" 
+                                                      FontSize="12" Padding="8,6" BorderThickness="0"
+                                                      Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                      KeyDown="TextBox_KeyDown" SelectionChanged="UnitMeasureComboBox_SelectionChanged"
+                                                      ToolTip="Press Enter to move to next field"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                                
+                                <!-- Right Column -->
+                                <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                    <!-- Category -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+                                        <StackPanel>
+                                            <TextBlock Text="📂 Category" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <TextBox x:Name="CategoryTextBox" Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}" 
+                                                     FontSize="12" Padding="8,6" BorderThickness="0"
+                                                     Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                     Style="{DynamicResource ModernTextBox}"
+                                                     KeyDown="TextBox_KeyDown"
+                                                     ToolTip="Press Enter to move to next field"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Supplier -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+                                        <StackPanel>
+                                            <TextBlock Text="🏢 Supplier" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <TextBox x:Name="SupplierTextBox" Text="{Binding Supplier, UpdateSourceTrigger=PropertyChanged}" 
+                                                     FontSize="12" Padding="8,6" BorderThickness="0"
+                                                     Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                     Style="{DynamicResource ModernTextBox}"
+                                                     KeyDown="TextBox_KeyDown"
+                                                     ToolTip="Press Enter to move to next field"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Reorder Level -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+                                        <StackPanel>
+                                            <TextBlock Text="⚠️ Reorder Level" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <TextBox x:Name="ReorderLevelTextBox" Text="{Binding ReorderLevel, UpdateSourceTrigger=PropertyChanged}" 
+                                                     FontSize="12" Padding="8,6" BorderThickness="0"
+                                                     Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                     Style="{DynamicResource ModernTextBox}"
+                                                     KeyDown="TextBox_KeyDown"
+                                                     ToolTip="Press Enter to move to next field"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Description -->
+                                    <Border Background="{DynamicResource SecondaryBackground}" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+                                        <StackPanel>
+                                            <TextBlock Text="📄 Description" FontWeight="SemiBold" Margin="0,0,0,5" 
+                                                       Foreground="{DynamicResource PrimaryText}" FontSize="12"/>
+                                            <TextBox x:Name="DescriptionTextBox" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" 
+                                                     Height="60" TextWrapping="Wrap"
+                                                     FontSize="12" Padding="8,6" BorderThickness="0"
+                                                     Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                     Style="{DynamicResource ModernTextBox}"
+                                                     KeyDown="TextBox_KeyDown"
+                                                     ToolTip="Press Enter to submit the form"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <!-- Action Buttons -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+                                <Button x:Name="AddProductButton" Content="➕ Add Product" Command="{Binding AddProductCommand}" 
+                                        Width="120" Height="35" Margin="0,0,10,0" 
+                                        Background="{DynamicResource SuccessButton}" Foreground="White"
+                                        FontWeight="Bold" FontSize="12"
+                                        Style="{DynamicResource ModernButton}"
+                                        KeyDown="AddProductButton_KeyDown"/>
+                                <Button Content="🔄 Clear Form" Command="{Binding ClearFormCommand}" 
+                                        Width="120" Height="35" 
+                                        Background="{DynamicResource WarningButton}" Foreground="White"
+                                        FontWeight="Bold" FontSize="12"
+                                        Style="{DynamicResource ModernButton}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- Right Panel: Product List -->
+                <Border Grid.Column="1" Background="{DynamicResource CardBackground}" CornerRadius="8" 
+                        Effect="{DynamicResource ModernCardShadow}">
+                    <Grid Margin="15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Product List Header -->
+                        <Border Grid.Row="0" Background="{DynamicResource PrimaryButton}" CornerRadius="6" Padding="10" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="📋 Product Inventory" 
+                                           FontSize="14" FontWeight="Bold" 
+                                           Foreground="White" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Current products in your inventory" 
+                                           FontSize="10" Foreground="White" 
+                                           HorizontalAlignment="Center" Margin="0,3,0,0" Opacity="0.9"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Product List with ScrollViewer -->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding Products}" 
+                                      AutoGenerateColumns="False" CanUserAddRows="False"
+                                      CanUserDeleteRows="False" IsReadOnly="True"
+                                      GridLinesVisibility="Horizontal" HeadersVisibility="Column"
+                                      RowBackground="{DynamicResource CardBackground}"
+                                      AlternatingRowBackground="{DynamicResource SecondaryBackground}"
+                                      Background="{DynamicResource CardBackground}"
+                                      BorderBrush="{DynamicResource BorderColor}"
+                                      Style="{DynamicResource ModernDataGrid}"
+                                      MinHeight="300"
+                                      MaxHeight="450">
+                                <DataGrid.Resources>
+                                    <!-- DataGrid Header Style -->
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="{DynamicResource PrimaryButton}"/>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+                                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                                        <Setter Property="Padding" Value="8,6"/>
+                                        <Setter Property="FontWeight" Value="SemiBold"/>
+                                        <Setter Property="FontSize" Value="11"/>
+                                    </Style>
+                                    
+                                    <!-- DataGrid Row Style -->
+                                    <Style TargetType="DataGridRow">
+                                        <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
+                                        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+                                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource PrimaryButton}"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource SecondaryBackground}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.Resources>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Product Name" Binding="{Binding Name}" Width="*" MinWidth="120"/>
+                                    <DataGridTextColumn Header="Barcode" Binding="{Binding Barcode}" Width="*" MinWidth="100"/>
+                                    <DataGridTextColumn Header="Price (Rs.)" Binding="{Binding Price}" Width="*" MinWidth="80"/>
+                                    <DataGridTextColumn Header="Quantity" Binding="{Binding QuantityDisplay}" Width="*" MinWidth="80"/>
+                                    <DataGridTextColumn Header="Unit Type" Binding="{Binding UnitTypeDisplay}" Width="*" MinWidth="80"/>
+                                    <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="*" MinWidth="80"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding StockStatus}" Width="*" MinWidth="70"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

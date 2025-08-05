@@ -1,0 +1,166 @@
+﻿<UserControl x:Class="VillageSmartPOS.Views.BillReceiptView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:VillageSmartPOS.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="280" d:DesignHeight="600">
+    <UserControl.DataContext>
+        <vm:BillReceiptViewModel />
+    </UserControl.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="5">
+        <StackPanel Background="White" MaxWidth="280">
+            <!-- Header -->
+            <StackPanel Margin="0,0,0,10">
+                <TextBlock Text="{Binding LogoText}" FontSize="24" FontWeight="Bold" TextAlignment="Center" Foreground="#2E86AB"/>
+                <TextBlock Text="{Binding GroceryName}" FontSize="16" TextAlignment="Center" FontWeight="SemiBold" Margin="0,3,0,0"/>
+                <TextBlock Text="{Binding StoreAddress}" TextAlignment="Center" FontSize="10" Margin="0,2,0,0"/>
+                <TextBlock Text="{Binding PhoneNumbers}" FontSize="9" TextAlignment="Center" Margin="0,3,0,0" Foreground="#666"/>
+            </StackPanel>
+
+            <!-- Receipt Details -->
+            <StackPanel Margin="0,0,0,8">
+                <TextBlock Text="{Binding BillNumber}" FontSize="10" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding DateTime}" FontSize="10"/>
+                <TextBlock Text="{Binding CashierName}" FontSize="10"/>
+            </StackPanel>
+
+            <!-- Loan Customer Information (only for loan payments) -->
+            <Border Background="#E8F5E8" BorderBrush="#2E7D32" BorderThickness="1" Margin="0,0,0,8" Padding="8"
+                    Visibility="{Binding IsLoanPayment, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <StackPanel>
+                    <TextBlock Text="💰 ණය ගෙවීම" FontWeight="Bold" FontSize="11" 
+                               Foreground="#2E7D32" HorizontalAlignment="Center" Margin="0,0,0,3"/>
+                    <TextBlock Text="{Binding CustomerInfoText}" FontSize="10" FontWeight="SemiBold" 
+                               HorizontalAlignment="Center" Margin="0,0,0,3"/>
+                    <TextBlock Text="{Binding LoanBalanceText}" FontSize="9" FontWeight="Bold" 
+                               Foreground="#FF6F00" HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+            <Separator Margin="0,8" Background="#DDD"/>
+
+            <!-- Items Section - Optimized for 80mm thermal printer -->
+            <StackPanel Margin="0,8,0,0">
+                <!-- Header -->
+                <Grid Background="#F8F9FA" Margin="0,0,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="35"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Column="0" Text="අයිතම" FontWeight="Bold" FontSize="11"/>
+                    <TextBlock Grid.Column="1" Text="ප්‍රමානය" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Column="2" Text="සදහන්&#x0D;&#x0A;මිල" FontWeight="Bold" FontSize="9" HorizontalAlignment="Right" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Column="3" Text="අපේ&#x0D;&#x0A;මිල" FontWeight="Bold" FontSize="9" HorizontalAlignment="Right" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Column="4" Text="මුළු" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/>
+                </Grid>
+                
+                <!-- Items List -->
+                <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="#E9ECEF" BorderThickness="0,0,0,1" Margin="0,4">
+                                <StackPanel>
+                                    <!-- Item Name and Prices Row -->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="35"/>
+                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition Width="50"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <!-- Item Name -->
+                                        <TextBlock Grid.Column="0" Text="{Binding Name}" 
+                                                   FontWeight="SemiBold" FontSize="10" TextWrapping="Wrap"/>
+                                        
+                                        <!-- Quantity -->
+                                        <TextBlock Grid.Column="1" Text="{Binding FormattedQuantity}" 
+                                                   HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="10"/>
+                                        
+                                        <!-- Marked Price -->
+                                        <TextBlock Grid.Column="2" Text="{Binding FormattedMarkedPrice}" 
+                                                   FontSize="9" Foreground="#FF6B35" 
+                                                   TextDecorations="Strikethrough" HorizontalAlignment="Right"/>
+                                        
+                                        <!-- Our Price -->
+                                        <TextBlock Grid.Column="3" Text="{Binding FormattedPrice}" 
+                                                   FontSize="9" Foreground="#4CAF50" FontWeight="Bold" 
+                                                   HorizontalAlignment="Right"/>
+                                        
+                                        <!-- Total -->
+                                        <TextBlock Grid.Column="4" Text="{Binding FormattedTotal}" 
+                                                   FontWeight="Bold" HorizontalAlignment="Right" FontSize="10"/>
+                                    </Grid>
+                                    
+                                    <!-- Savings Row -->
+                                    <TextBlock Text="{Binding SavingsText}" FontSize="9" 
+                                               Foreground="#2196F3" FontWeight="Bold" 
+                                               Margin="0,2,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <Separator Margin="0,5" Background="#DDD"/>
+
+            <!-- Totals -->
+            <StackPanel Margin="0,8,0,12">
+                <!-- Total Savings Section -->
+                <Border Background="#E8F5E8" BorderBrush="#4CAF50" BorderThickness="1" Margin="0,0,0,8" Padding="8">
+                    <StackPanel>
+                        <TextBlock Text="💰 ගනුදෙනුකරුගේ ඉතුරුම්" FontWeight="Bold" FontSize="12" 
+                                   Foreground="#2E7D32" HorizontalAlignment="Center" Margin="0,0,0,3"/>
+                        <TextBlock Text="{Binding TotalSavingsText}" FontWeight="Bold" FontSize="13" 
+                                   Foreground="#2E7D32" HorizontalAlignment="Center"/>
+                        <TextBlock Text="සදහන් මුළු:" FontSize="10" Foreground="#FF6B35" 
+                                   TextDecorations="Strikethrough" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                        <TextBlock Text="{Binding TotalMarkedAmount, StringFormat='Rs. {0:F2}'}" FontSize="10" Foreground="#FF6B35" 
+                                   TextDecorations="Strikethrough" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                
+                <Grid Margin="0,0,0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="මුළු මුදල:" Grid.Column="0" FontWeight="Bold" FontSize="12"/>
+                    <TextBlock Text="{Binding TotalAmount, StringFormat='Rs. {0:F2}'}" Grid.Column="1" FontWeight="Bold" FontSize="12" TextAlignment="Right"/>
+                </Grid>
+                <Grid Margin="0,0,0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="ගෙවීමේ ක්‍රමය:" Grid.Column="0" FontSize="11"/>
+                    <TextBlock Text="{Binding PaymentMethodText}" Grid.Column="1" FontSize="11" TextAlignment="Right" 
+                               FontWeight="Bold" Foreground="{Binding IsLoanPayment, Converter={StaticResource LoanPaymentColorConverter}}"/>
+                </Grid>
+                <Grid Margin="0,0,0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="80"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="ඉතිරිය:" Grid.Column="0" FontSize="11"/>
+                    <TextBlock Text="{Binding BalanceAmount, StringFormat='Rs. {0:F2}'}" Grid.Column="1" FontSize="11" TextAlignment="Right" 
+                               Foreground="{Binding BalanceAmount, Converter={StaticResource BalanceColorConverter}}"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- Footer -->
+            <StackPanel Margin="0,12,0,0">
+                <TextBlock Text="{Binding ReceiptFooter}" FontSize="12" FontStyle="Italic" TextAlignment="Center" Foreground="#666"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

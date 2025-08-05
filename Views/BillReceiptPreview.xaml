@@ -1,0 +1,52 @@
+﻿<Window x:Class="VillageSmartPOS.Views.BillReceiptPreview"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Bill Preview - Thermal Printer Format"
+        Height="700"
+        Width="320"
+        MinHeight="500"
+        MinWidth="300"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize">
+
+    <DockPanel LastChildFill="True" Background="White" Margin="8">
+
+        <!-- Buttons - Fixed at top for better visibility -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,8">
+            <Button Content="🖨 Print Bill"
+                    Width="120"
+                    Height="35"
+                    Margin="4,0"
+                    Click="Print_Click"
+                    Background="#FF007ACC"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    FontSize="11"/>
+
+            <Button Content="❌ Close"
+                    Width="120"
+                    Height="35"
+                    Margin="4,0"
+                    Click="Close_Click"
+                    Background="Gray"
+                    Foreground="White"
+                    FontWeight="Bold"
+                    FontSize="11"/>
+        </StackPanel>
+
+        <!-- Scrollable receipt preview -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                      HorizontalScrollBarVisibility="Disabled"
+                      Margin="0,8,0,0">
+            <Border Margin="8"
+                    Padding="12"
+                    BorderBrush="#DDD"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Background="White"
+                    MaxWidth="300">
+                <ContentControl x:Name="ReceiptContent"/>
+            </Border>
+        </ScrollViewer>
+    </DockPanel>
+</Window>
