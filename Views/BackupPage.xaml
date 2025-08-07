@@ -1,0 +1,188 @@
+<UserControl x:Class="VillageSmartPOS.Views.BackupPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="800">
+    
+    <Grid Background="{DynamicResource BackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBackground}" 
+                Effect="{DynamicResource ModernCardShadow}" Margin="20,20,20,10">
+            <StackPanel Margin="20">
+                <TextBlock Text="💾 Backup &amp; Reports" 
+                           FontSize="24" FontWeight="Bold" 
+                           Foreground="{DynamicResource PrimaryText}" 
+                           HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                <TextBlock Text="Generate PDF reports for loan customers, temporary balances, and product details" 
+                           FontSize="14" Foreground="{DynamicResource SecondaryText}" 
+                           HorizontalAlignment="Center" TextAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="20,10,20,20">
+            <StackPanel>
+                
+                <!-- Loan Customers Report Section -->
+                <Border Background="{DynamicResource CardBackground}" 
+                        Effect="{DynamicResource ModernCardShadow}" 
+                        CornerRadius="8" Margin="0,0,0,20" Padding="20">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBlock Text="👥" FontSize="24" Margin="0,0,10,0"/>
+                            <StackPanel>
+                                <TextBlock Text="Loan Customers Report" 
+                                           FontSize="18" FontWeight="Bold" 
+                                           Foreground="{DynamicResource PrimaryText}"/>
+                                <TextBlock Text="Generate PDF with current loan amounts and customer details" 
+                                           FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="📊 Generate Loan Report" 
+                                    Command="{Binding GenerateLoanReportCommand}"
+                                    Width="200" Height="40" Margin="0,0,10,0"
+                                    Background="{DynamicResource PrimaryButton}" Foreground="White"
+                                    FontWeight="Bold" FontSize="14"
+                                    Style="{DynamicResource ModernButton}"/>
+                            <Button Content="📁 Open Folder" 
+                                    Command="{Binding OpenReportsFolderCommand}"
+                                    Width="120" Height="40"
+                                    Background="{DynamicResource SecondaryButton}" Foreground="White"
+                                    FontWeight="Bold" FontSize="12"
+                                    Style="{DynamicResource ModernButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Temporary Balances Report Section -->
+                <Border Background="{DynamicResource CardBackground}" 
+                        Effect="{DynamicResource ModernCardShadow}" 
+                        CornerRadius="8" Margin="0,0,0,20" Padding="20">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBlock Text="💰" FontSize="24" Margin="0,0,10,0"/>
+                            <StackPanel>
+                                <TextBlock Text="Temporary Balances Report" 
+                                           FontSize="18" FontWeight="Bold" 
+                                           Foreground="{DynamicResource PrimaryText}"/>
+                                <TextBlock Text="Generate PDF with temporary loan details and balances" 
+                                           FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="📊 Generate Balance Report" 
+                                    Command="{Binding GenerateBalanceReportCommand}"
+                                    Width="200" Height="40" Margin="0,0,10,0"
+                                    Background="{DynamicResource SuccessButton}" Foreground="White"
+                                    FontWeight="Bold" FontSize="14"
+                                    Style="{DynamicResource ModernButton}"/>
+                            <Button Content="📁 Open Folder" 
+                                    Command="{Binding OpenReportsFolderCommand}"
+                                    Width="120" Height="40"
+                                    Background="{DynamicResource SecondaryButton}" Foreground="White"
+                                    FontWeight="Bold" FontSize="12"
+                                    Style="{DynamicResource ModernButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Product Details Report Section -->
+                <Border Background="{DynamicResource CardBackground}" 
+                        Effect="{DynamicResource ModernCardShadow}" 
+                        CornerRadius="8" Margin="0,0,0,20" Padding="20">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBlock Text="📦" FontSize="24" Margin="0,0,10,0"/>
+                            <StackPanel>
+                                <TextBlock Text="Product Details Report" 
+                                           FontSize="18" FontWeight="Bold" 
+                                           Foreground="{DynamicResource PrimaryText}"/>
+                                <TextBlock Text="Generate PDF with complete product inventory details" 
+                                           FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="📊 Generate Product Report" 
+                                    Command="{Binding GenerateProductReportCommand}"
+                                    Width="200" Height="40" Margin="0,0,10,0"
+                                    Background="{DynamicResource WarningButton}" Foreground="White"
+                                    FontWeight="Bold" FontSize="14"
+                                    Style="{DynamicResource ModernButton}"/>
+                            <Button Content="📁 Open Folder" 
+                                    Command="{Binding OpenReportsFolderCommand}"
+                                    Width="120" Height="40"
+                                    Background="{DynamicResource SecondaryButton}" Foreground="White"
+                                    FontWeight="Bold" FontSize="12"
+                                    Style="{DynamicResource ModernButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- SQL Export Section -->
+                <Border Background="{DynamicResource CardBackground}" 
+                        Effect="{DynamicResource ModernCardShadow}" 
+                        CornerRadius="8" Margin="0,0,0,20" Padding="20">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBlock Text="🗄️" FontSize="24" Margin="0,0,10,0"/>
+                            <StackPanel>
+                                <TextBlock Text="Database SQL Export" 
+                                           FontSize="18" FontWeight="Bold" 
+                                           Foreground="{DynamicResource PrimaryText}"/>
+                                <TextBlock Text="Export complete database structure and data as SQL script" 
+                                           FontSize="12" Foreground="{DynamicResource SecondaryText}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="🗄️ Export SQL Script" 
+                                    Command="{Binding ExportSqlScriptCommand}"
+                                    Width="200" Height="40" Margin="0,0,10,0"
+                                    Background="{DynamicResource InfoButton}" Foreground="White"
+                                    FontWeight="Bold" FontSize="14"
+                                    Style="{DynamicResource ModernButton}"/>
+                            <Button Content="📁 Open Folder" 
+                                    Command="{Binding OpenReportsFolderCommand}"
+                                    Width="120" Height="40"
+                                    Background="{DynamicResource SecondaryButton}" Foreground="White"
+                                    FontWeight="Bold" FontSize="12"
+                                    Style="{DynamicResource ModernButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Status Section -->
+                <Border Background="{DynamicResource CardBackground}" 
+                        Effect="{DynamicResource ModernCardShadow}" 
+                        CornerRadius="8" Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="📋 Status" FontSize="16" FontWeight="Bold" 
+                                   Foreground="{DynamicResource PrimaryText}" Margin="0,0,0,10"/>
+                        
+                        <TextBlock Text="{Binding StatusMessage}" 
+                                   FontSize="12" Foreground="{DynamicResource SecondaryText}"
+                                   TextWrapping="Wrap" Margin="0,0,0,10"/>
+                        
+                        <ProgressBar Value="{Binding ProgressValue}" 
+                                     Maximum="100" Height="4" 
+                                     Background="{DynamicResource SecondaryBackground}"
+                                     Foreground="{DynamicResource PrimaryButton}"
+                                     Visibility="{Binding IsGenerating, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl> 

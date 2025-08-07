@@ -208,5 +208,10 @@ namespace VillageSmartPOS.Views
                 viewModel.UnitMeasure = selectedMeasure;
             }
         }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

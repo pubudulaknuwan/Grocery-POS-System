@@ -24,10 +24,10 @@ namespace VillageSmartPOS.Models
         public string StockStatus => IsOutOfStock ? "Out of Stock" : IsLowStock ? "Low Stock" : "In Stock";
         
         // Computed properties for dual pricing strategy
-        public decimal Savings => MarkedPrice > Price ? MarkedPrice - Price : 0;
+        public decimal Savings => MarkedPrice > 0 && MarkedPrice > Price ? MarkedPrice - Price : 0;
         public decimal SavingsPercentage => MarkedPrice > 0 ? (Savings / MarkedPrice) * 100 : 0;
-        public string SavingsText => MarkedPrice > Price ? $"Save ${Savings:F2}" : "";
-        public string DualPriceText => MarkedPrice > Price ? $"${MarkedPrice:F2} → ${Price:F2}" : $"${Price:F2}";
+        public string SavingsText => MarkedPrice > 0 && MarkedPrice > Price ? $"Save ${Savings:F2}" : "";
+        public string DualPriceText => MarkedPrice > 0 && MarkedPrice > Price ? $"${MarkedPrice:F2} → ${Price:F2}" : $"${Price:F2}";
         
         // Computed properties for unit display
         public string QuantityDisplay => $"{Quantity} {UnitMeasure}";
@@ -38,6 +38,9 @@ namespace VillageSmartPOS.Models
         public bool IsMassBased => UnitType == "mass";
         public bool IsUnitBased => UnitType == "unit";
         public string UnitTypeDisplay => UnitType == "mass" ? "Mass (kg/g)" : "Units (pieces/bottles)";
+        
+        // Formatted properties for display
+        public string FormattedMarkedPrice => MarkedPrice > 0 ? $"{MarkedPrice:F2}" : "";
     }
 }
 

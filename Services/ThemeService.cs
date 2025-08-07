@@ -81,6 +81,11 @@ namespace VillageSmartPOS.Services
             // Shadow colors - use Color object for DropShadowEffect
             resources["ShadowColor"] = Color.FromRgb(0, 0, 0); // Black color for shadow
             
+            // Bill Items Table colors
+            resources["BillItemBackground"] = new SolidColorBrush(Color.FromRgb(240, 245, 250)); // Light blue-gray
+            resources["BillItemHeaderBackground"] = new SolidColorBrush(Color.FromRgb(220, 235, 250)); // Medium blue
+            resources["BillItemHoverBackground"] = new SolidColorBrush(Color.FromRgb(220, 240, 220)); // Light green
+            
             // Apply resources
             foreach (var kvp in resources)
             {
@@ -123,6 +128,11 @@ namespace VillageSmartPOS.Services
             
             // Shadow colors - use Color object for DropShadowEffect
             resources["ShadowColor"] = Color.FromRgb(0, 0, 0); // Black color for shadow
+            
+            // Bill Items Table colors (dark theme)
+            resources["BillItemBackground"] = new SolidColorBrush(Color.FromRgb(65, 75, 85)); // Medium dark blue-gray
+            resources["BillItemHeaderBackground"] = new SolidColorBrush(Color.FromRgb(50, 70, 90)); // Dark blue
+            resources["BillItemHoverBackground"] = new SolidColorBrush(Color.FromRgb(60, 80, 60)); // Dark green
             
             // Apply resources
             foreach (var kvp in resources)

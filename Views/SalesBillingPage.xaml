@@ -18,6 +18,7 @@
         <!-- Converters -->
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
         <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+        <converters:SearchSuggestionsVisibilityConverter x:Key="SearchSuggestionsVisibilityConverter"/>
         
 
         
@@ -246,7 +247,7 @@
 
         <!-- Simple DataGrid Style -->
         <Style x:Key="SimpleDataGrid" TargetType="DataGrid">
-            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="Background" Value="{DynamicResource BillItemBackground}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource InputBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="GridLinesVisibility" Value="Horizontal"/>
@@ -259,6 +260,7 @@
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
             <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource SecondaryBackground}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGrid">
@@ -276,7 +278,7 @@
 
         <!-- Enhanced Column Header Style -->
         <Style x:Key="EnhancedColumnHeader" TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="{DynamicResource SecondaryBackground}"/>
+            <Setter Property="Background" Value="{DynamicResource BillItemHeaderBackground}"/>
             <Setter Property="Foreground" Value="{DynamicResource PrimaryText}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="13"/>
@@ -300,7 +302,7 @@
 
         <!-- Enhanced DataGrid Row Style -->
         <Style x:Key="EnhancedDataGridRow" TargetType="DataGridRow">
-            <Setter Property="Background" Value="{DynamicResource CardBackground}"/>
+            <Setter Property="Background" Value="{DynamicResource BillItemBackground}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGridRow">
@@ -316,7 +318,7 @@
                                 <Setter Property="BorderThickness" Value="0,0,0,2"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#F5F5F5"/>
+                                <Setter Property="Background" Value="{DynamicResource BillItemHoverBackground}"/>
                             </Trigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
@@ -408,9 +410,14 @@
                     <!-- Search Suggestions Dropdown -->
                     <Border Grid.Row="1" Background="White" BorderBrush="#DDD" BorderThickness="1" 
                             CornerRadius="4" MaxHeight="200" Margin="0,2,0,0"
-                            Visibility="{Binding SearchSuggestions.Count, Converter={StaticResource CountToVisibilityConverter}}"
                             x:Name="SuggestionsBorder"
                             IsVisibleChanged="SuggestionsBorder_IsVisibleChanged">
+                        <Border.Visibility>
+                            <MultiBinding Converter="{StaticResource SearchSuggestionsVisibilityConverter}">
+                                <Binding Path="SearchTerm"/>
+                                <Binding Path="SearchSuggestions.Count"/>
+                            </MultiBinding>
+                        </Border.Visibility>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200" x:Name="SuggestionsScrollViewer">
                             <ItemsControl ItemsSource="{Binding SearchSuggestions}" x:Name="SuggestionsItemsControl">
                                 <ItemsControl.ItemTemplate>
@@ -570,7 +577,9 @@
                       ItemsSource="{Binding BillItems}"
                       VerticalAlignment="Stretch"
                       RowStyle="{StaticResource EnhancedDataGridRow}"
-                      CellStyle="{StaticResource EnhancedDataGridCell}">
+                      CellStyle="{StaticResource EnhancedDataGridCell}"
+                      BorderBrush="{DynamicResource BorderColor}"
+                      BorderThickness="1">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource EnhancedColumnHeader}"/>
                 </DataGrid.ColumnHeaderStyle>

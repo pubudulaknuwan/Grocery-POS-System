@@ -242,12 +242,11 @@
                                 Opacity="0.5"
                                 Margin="2"/>
 
-                        <!-- Backup Button (Dummy) -->
-                        <Button Content="{DynamicResource NavBackup}" 
+                        <!-- Backup Button -->
+                        <Button Content="Backup" 
                                 Tag="💾"
                                 Style="{StaticResource DangerSquareButton}"
-                                IsEnabled="False"
-                                Opacity="0.5"
+                                Command="{Binding NavigateToBackupCommand}"
                                 Margin="2"/>
 
                         <!-- Users Button (Dummy) -->

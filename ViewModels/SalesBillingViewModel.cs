@@ -196,11 +196,20 @@ namespace VillageSmartPOS.ViewModels
                 return;
             }
 
-            // Check if we have enough stock
+            // Check if we have enough stock - allow with warning for empty quantities
             if (product.Quantity < Quantity)
             {
-                StatusMessage = $"Insufficient stock. Available: {product.Quantity}";
-                return;
+                if (product.Quantity == 0)
+                {
+                    // Allow adding products with empty quantity but show warning
+                    StatusMessage = $"⚠️ WARNING: {product.Name} has no stock quantity set. Product added to bill anyway.";
+                }
+                else
+                {
+                    // For products with some stock but insufficient, show error
+                    StatusMessage = $"Insufficient stock. Available: {product.Quantity}";
+                    return;
+                }
             }
 
             var existingItem = BillItems.FirstOrDefault(i => i.Barcode == product.Barcode);
@@ -226,8 +235,11 @@ namespace VillageSmartPOS.ViewModels
                 StatusMessage = $"Added {product.Name} to bill (Total items: {BillItems.Count})";
             }
 
-            // Update stock in database
-            dbService.UpdateStockAfterSale(product.Barcode, Quantity);
+            // Update stock in database (only if product has stock quantity set)
+            if (product.Quantity > 0)
+            {
+                dbService.UpdateStockAfterSale(product.Barcode, Quantity);
+            }
 
             // Notify UI
             OnPropertyChanged(nameof(BillItems));

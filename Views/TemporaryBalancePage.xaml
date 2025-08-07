@@ -78,7 +78,9 @@
                         <TextBox Text="{Binding CustomerName, UpdateSourceTrigger=PropertyChanged}"
                                  FontSize="14" Padding="12,8" BorderThickness="1"
                                  Background="Transparent" Foreground="{DynamicResource PrimaryText}"
-                                 ToolTip="Enter customer name"/>
+                                 ToolTip="Enter customer name (Press Enter to move to next field)"
+                                 x:Name="CustomerNameTextBox"
+                                 KeyDown="CustomerNameTextBox_KeyDown"/>
                     </StackPanel>
 
                     <!-- Balance -->
@@ -87,7 +89,9 @@
                         <TextBox Text="{Binding BalanceText, UpdateSourceTrigger=PropertyChanged}"
                                  FontSize="14" Padding="12,8" BorderThickness="1"
                                  Background="Transparent" Foreground="{DynamicResource PrimaryText}"
-                                 ToolTip="Enter balance amount"/>
+                                 ToolTip="Enter balance amount (Press Enter to move to next field)"
+                                 x:Name="BalanceTextBox"
+                                 KeyDown="BalanceTextBox_KeyDown"/>
                     </StackPanel>
 
                     <!-- Notes -->
@@ -96,7 +100,9 @@
                         <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}"
                                  FontSize="14" Padding="12,8" BorderThickness="1"
                                  Background="Transparent" Foreground="{DynamicResource PrimaryText}"
-                                 ToolTip="Optional notes about the balance"/>
+                                 ToolTip="Optional notes about the balance (Press Enter to add balance)"
+                                 x:Name="NotesTextBox"
+                                 KeyDown="NotesTextBox_KeyDown"/>
                     </StackPanel>
 
                     <!-- Action Buttons -->
@@ -136,41 +142,44 @@
                        TextWrapping="Wrap"/>
         </Border>
 
-        <!-- Balances DataGrid -->
-        <Grid Grid.Row="4" Margin="0,0,0,20" VerticalAlignment="Stretch">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                 <!-- Balances DataGrid -->
+         <Grid Grid.Row="4" Margin="0,0,0,20" VerticalAlignment="Stretch">
+             <Grid.RowDefinitions>
+                 <RowDefinition Height="Auto"/>
+                 <RowDefinition Height="*" MinHeight="400"/>
+             </Grid.RowDefinitions>
 
             <TextBlock Grid.Row="0" Text="📋 Temporary Balances" 
                        FontSize="16" FontWeight="Bold" 
                        Foreground="{DynamicResource PrimaryText}" 
                        Margin="0,0,0,10"/>
 
-            <DataGrid Grid.Row="1" 
-                      ItemsSource="{Binding Balances}"
-                      SelectedItem="{Binding SelectedBalance}"
-                      VerticalAlignment="Stretch"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      CanUserDeleteRows="False"
-                      CanUserReorderColumns="True"
-                      CanUserResizeColumns="True"
-                      CanUserResizeRows="False"
-                      CanUserSortColumns="True"
-                      GridLinesVisibility="Horizontal"
-                      HeadersVisibility="Column"
-                      SelectionMode="Single"
-                      SelectionUnit="FullRow">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Customer Name" Binding="{Binding CustomerName}" Width="2*"/>
-                    <DataGridTextColumn Header="Balance" Binding="{Binding FormattedBalance, Mode=OneWay}" Width="1*"/>
-                    <DataGridTextColumn Header="Created" Binding="{Binding FormattedCreatedAt, Mode=OneWay}" Width="1.5*"/>
-                    <DataGridTextColumn Header="Updated" Binding="{Binding FormattedUpdatedAt, Mode=OneWay}" Width="1.5*"/>
-                    <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="2*"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                 <DataGrid ItemsSource="{Binding Balances}"
+                           SelectedItem="{Binding SelectedBalance}"
+                           VerticalAlignment="Stretch"
+                           AutoGenerateColumns="False"
+                           CanUserAddRows="False"
+                           CanUserDeleteRows="False"
+                           CanUserReorderColumns="True"
+                           CanUserResizeColumns="True"
+                           CanUserResizeRows="False"
+                           CanUserSortColumns="True"
+                           GridLinesVisibility="Horizontal"
+                           HeadersVisibility="Column"
+                           SelectionMode="Single"
+                           SelectionUnit="FullRow"
+                           MinHeight="300"
+                           MaxHeight="800">
+                     <DataGrid.Columns>
+                         <DataGridTextColumn Header="Customer Name" Binding="{Binding CustomerName}" Width="3*" MinWidth="180"/>
+                         <DataGridTextColumn Header="Balance" Binding="{Binding FormattedBalance, Mode=OneWay}" Width="1.5*" MinWidth="120"/>
+                         <DataGridTextColumn Header="Created" Binding="{Binding FormattedCreatedAt, Mode=OneWay}" Width="2*" MinWidth="140"/>
+                         <DataGridTextColumn Header="Updated" Binding="{Binding FormattedUpdatedAt, Mode=OneWay}" Width="2*" MinWidth="140"/>
+                         <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="3*" MinWidth="180"/>
+                     </DataGrid.Columns>
+                 </DataGrid>
+             </ScrollViewer>
         </Grid>
     </Grid>
 </UserControl> 

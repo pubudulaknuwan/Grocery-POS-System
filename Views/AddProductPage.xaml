@@ -13,14 +13,14 @@
     </UserControl.DataContext>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Grid Margin="10" MinWidth="800">
+        <Grid Margin="5" MinWidth="800">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <!-- Header Section -->
-            <Border Grid.Row="0" Background="{DynamicResource SuccessButton}" CornerRadius="8" Padding="15" Margin="0,0,0,15">
+            <Border Grid.Row="0" Background="{DynamicResource SuccessButton}" CornerRadius="8" Padding="15" Margin="0,0,0,10">
                 <StackPanel>
                     <TextBlock Text="📦 Add New Product" 
                                FontSize="20" FontWeight="Bold" 
@@ -34,12 +34,13 @@
             <!-- Main Content -->
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" MinWidth="350" MaxWidth="500"/>
+                    <ColumnDefinition Width="1*" MinWidth="350" MaxWidth="450"/>
+                    <ColumnDefinition Width="5"/>
                     <ColumnDefinition Width="2*" MinWidth="400"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Left Panel: Add Product Form -->
-                <Border Grid.Column="0" Background="{DynamicResource CardBackground}" CornerRadius="8" Margin="0,0,10,0" 
+                <Border Grid.Column="0" Background="{DynamicResource CardBackground}" CornerRadius="8" 
                         Effect="{DynamicResource ModernCardShadow}">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="15">
                         <StackPanel>
@@ -243,7 +244,7 @@
                 </Border>
 
                 <!-- Right Panel: Product List -->
-                <Border Grid.Column="1" Background="{DynamicResource CardBackground}" CornerRadius="8" 
+                <Border Grid.Column="2" Background="{DynamicResource CardBackground}" CornerRadius="8" 
                         Effect="{DynamicResource ModernCardShadow}">
                     <Grid Margin="15">
                         <Grid.RowDefinitions>
@@ -252,7 +253,7 @@
                         </Grid.RowDefinitions>
 
                         <!-- Product List Header -->
-                        <Border Grid.Row="0" Background="{DynamicResource PrimaryButton}" CornerRadius="6" Padding="10" Margin="0,0,0,0">
+                        <Border Grid.Row="0" Background="{DynamicResource PrimaryButton}" CornerRadius="6" Padding="10" Margin="0,0,0,5">
                             <StackPanel>
                                 <TextBlock Text="📋 Product Inventory" 
                                            FontSize="14" FontWeight="Bold" 
@@ -264,7 +265,7 @@
                         </Border>
 
                         <!-- Product List with ScrollViewer -->
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="0,-5,0,0">
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0">
                             <DataGrid ItemsSource="{Binding Products}" 
                                       AutoGenerateColumns="False" CanUserAddRows="False"
                                       CanUserDeleteRows="False" IsReadOnly="True"
@@ -275,7 +276,7 @@
                                       BorderBrush="{DynamicResource BorderColor}"
                                       Style="{DynamicResource ModernDataGrid}"
                                       MinHeight="300"
-                                      MaxHeight="450">
+                                      MaxHeight="650" SelectionChanged="DataGrid_SelectionChanged">
                                 <DataGrid.Resources>
                                     <!-- DataGrid Header Style -->
                                     <Style TargetType="DataGridColumnHeader">

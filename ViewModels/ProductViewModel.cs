@@ -174,9 +174,10 @@ namespace VillageSmartPOS.ViewModels
                     return;
                 }
 
-                if (MarkedPrice <= 0)
+                // Allow 0 marked price for products without marked prices (like fresh produce, bulk items)
+                if (MarkedPrice < 0)
                 {
-                    MessageBox.Show("Please enter a valid marked price greater than 0.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Marked price cannot be negative.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 

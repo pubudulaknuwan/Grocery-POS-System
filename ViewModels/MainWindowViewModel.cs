@@ -27,6 +27,7 @@ namespace VillageSmartPOS.ViewModels
         public ICommand NavigateToLoanCustomersCommand { get; }
         public ICommand NavigateToTemporaryBalanceCommand { get; }
         public ICommand NavigateToSettingsCommand { get; }
+        public ICommand NavigateToBackupCommand { get; }
 
         public MainWindowViewModel()
         {
@@ -40,6 +41,7 @@ namespace VillageSmartPOS.ViewModels
             NavigateToLoanCustomersCommand = new RelayCommand(ShowLoanCustomerPage);
             NavigateToTemporaryBalanceCommand = new RelayCommand(ShowTemporaryBalancePage);
             NavigateToSettingsCommand = new RelayCommand(ShowSettingsPage);
+            NavigateToBackupCommand = new RelayCommand(ShowBackupPage);
         }
 
         private void ShowSalesBillingPage()
@@ -97,6 +99,12 @@ namespace VillageSmartPOS.ViewModels
         {
             CurrentView = new SettingsPage();
             CurrentView.DataContext = new SettingsViewModel();
+        }
+
+        private void ShowBackupPage()
+        {
+            CurrentView = new BackupPage();
+            CurrentView.DataContext = new BackupViewModel();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
