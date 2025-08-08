@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Payment" Height="450" Width="500" 
-        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        KeyDown="PaymentDialog_KeyDown">
     
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -101,9 +102,11 @@
                 
                 <!-- Confirm Cash Payment Button -->
                 <Button Content="💵 Confirm Cash Payment" 
+                        Style="{StaticResource NavigationButton}"
                         Command="{Binding ConfirmCashPaymentCommand}"
                         Background="#4CAF50" Foreground="White" 
-                        FontWeight="Bold" Padding="10" Margin="0,5,0,0"/>
+                        FontWeight="Bold" Padding="10" Margin="0,5,0,0"
+                        Name="ConfirmCashPaymentButton"/>
             </StackPanel>
         </Border>
         

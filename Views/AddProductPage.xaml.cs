@@ -24,6 +24,49 @@ namespace VillageSmartPOS.Views
         public AddProductPage()
         {
             InitializeComponent();
+            
+            // Set up the delegate to reset form ComboBoxes after XAML is loaded
+            Loaded += (s, e) => 
+            {
+                // Initialize Unit Measure ComboBox with default options
+                InitializeUnitMeasureComboBox();
+                
+                // Set up the delegate to reset form ComboBoxes
+                if (DataContext is ProductViewModel viewModel)
+                {
+                    viewModel.ResetFormComboBoxes = ResetFormComboBoxes;
+                    viewModel.FocusProductNameField = FocusProductNameField;
+                }
+                
+                // Focus Product Name field when page loads
+                FocusProductNameField();
+            };
+        }
+
+        /// <summary>
+        /// Initializes the Unit Measure ComboBox with default options
+        /// </summary>
+        private void InitializeUnitMeasureComboBox()
+        {
+            // Check if ComboBox is initialized
+            if (UnitMeasureComboBox == null)
+            {
+                return;
+            }
+            
+            // Clear existing items
+            UnitMeasureComboBox.Items.Clear();
+            
+            // Add default unit options (since Unit Type defaults to "unit")
+            UnitMeasureComboBox.Items.Add("pieces");
+            UnitMeasureComboBox.Items.Add("bottles");
+            UnitMeasureComboBox.Items.Add("packets");
+            UnitMeasureComboBox.Items.Add("boxes");
+            UnitMeasureComboBox.Items.Add("cans");
+            UnitMeasureComboBox.Items.Add("units");
+            
+            // Set default selection
+            UnitMeasureComboBox.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -79,7 +122,9 @@ namespace VillageSmartPOS.Views
                 CategoryTextBox,       // 8. Category
                 SupplierTextBox,       // 9. Supplier
                 ReorderLevelTextBox,   // 10. Reorder Level
-                DescriptionTextBox     // 11. Description
+                DescriptionTextBox,    // 11. Description
+                AddProductButton,      // 12. Add Product Button
+                ClearFormButton        // 13. Clear Form Button
             };
 
             // Find the current control in the navigation order
@@ -147,10 +192,36 @@ namespace VillageSmartPOS.Views
         }
 
         /// <summary>
+        /// Handles Enter key press on the Clear Form button
+        /// </summary>
+        private void ClearFormButton_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true; // Prevent default Enter behavior
+                
+                // Execute the Clear Form command
+                if (ClearFormButton != null && ClearFormButton.Command != null && ClearFormButton.Command.CanExecute(null))
+                {
+                    ClearFormButton.Command.Execute(null);
+                }
+                
+                // Focus Product Name field after clearing
+                FocusProductNameField();
+            }
+        }
+
+        /// <summary>
         /// Handles Unit Type ComboBox selection change to refresh Unit Measure options
         /// </summary>
         private void UnitTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Check if ComboBoxes are initialized
+            if (UnitTypeComboBox == null || UnitMeasureComboBox == null)
+            {
+                return;
+            }
+            
             // Get the selected ComboBoxItem and extract its Tag value
             if (UnitTypeComboBox.SelectedItem is ComboBoxItem selectedItem && 
                 selectedItem.Tag is string unitType && 
@@ -158,6 +229,9 @@ namespace VillageSmartPOS.Views
             {
                 // Update the ViewModel's UnitType property
                 viewModel.UnitType = unitType;
+                
+                // Store the current Unit Measure selection if it exists
+                string currentUnitMeasure = UnitMeasureComboBox.SelectedItem as string ?? "pieces";
                 
                 // Clear existing items from UnitMeasureComboBox
                 UnitMeasureComboBox.Items.Clear();
@@ -170,12 +244,13 @@ namespace VillageSmartPOS.Views
                     UnitMeasureComboBox.Items.Add("lb");
                     UnitMeasureComboBox.Items.Add("oz");
                     
-                    // Set default selection
-                    if (UnitMeasureComboBox.Items.Count > 0)
-                    {
-                        UnitMeasureComboBox.SelectedIndex = 0;
-                        viewModel.UnitMeasure = "kg";
-                    }
+                    // Try to select the previous mass-based unit measure, or default to "kg"
+                    string defaultMassMeasure = (currentUnitMeasure == "kg" || currentUnitMeasure == "g" || 
+                                              currentUnitMeasure == "lb" || currentUnitMeasure == "oz") 
+                                              ? currentUnitMeasure : "kg";
+                    
+                    UnitMeasureComboBox.SelectedItem = defaultMassMeasure;
+                    viewModel.UnitMeasure = defaultMassMeasure;
                 }
                 else
                 {
@@ -186,12 +261,14 @@ namespace VillageSmartPOS.Views
                     UnitMeasureComboBox.Items.Add("cans");
                     UnitMeasureComboBox.Items.Add("units");
                     
-                    // Set default selection
-                    if (UnitMeasureComboBox.Items.Count > 0)
-                    {
-                        UnitMeasureComboBox.SelectedIndex = 0;
-                        viewModel.UnitMeasure = "pieces";
-                    }
+                    // Try to select the previous unit-based unit measure, or default to "pieces"
+                    string defaultUnitMeasure = (currentUnitMeasure == "pieces" || currentUnitMeasure == "bottles" || 
+                                              currentUnitMeasure == "packets" || currentUnitMeasure == "boxes" || 
+                                              currentUnitMeasure == "cans" || currentUnitMeasure == "units") 
+                                              ? currentUnitMeasure : "pieces";
+                    
+                    UnitMeasureComboBox.SelectedItem = defaultUnitMeasure;
+                    viewModel.UnitMeasure = defaultUnitMeasure;
                 }
             }
         }
@@ -206,6 +283,39 @@ namespace VillageSmartPOS.Views
                 DataContext is ProductViewModel viewModel)
             {
                 viewModel.UnitMeasure = selectedMeasure;
+            }
+        }
+
+        /// <summary>
+        /// Resets the form ComboBoxes to their default state
+        /// </summary>
+        public void ResetFormComboBoxes()
+        {
+            // Check if ComboBoxes are initialized
+            if (UnitTypeComboBox == null || UnitMeasureComboBox == null)
+            {
+                return;
+            }
+            
+            // Reset Unit Type to default
+            if (UnitTypeComboBox.Items.Count > 0)
+            {
+                UnitTypeComboBox.SelectedIndex = 0;
+            }
+            
+            // Reset Unit Measure to default
+            InitializeUnitMeasureComboBox();
+        }
+
+        /// <summary>
+        /// Focuses the Product Name TextBox
+        /// </summary>
+        public void FocusProductNameField()
+        {
+            if (ProductNameTextBox != null)
+            {
+                ProductNameTextBox.Focus();
+                ProductNameTextBox.SelectAll();
             }
         }
 

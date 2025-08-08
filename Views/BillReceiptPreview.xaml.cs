@@ -5,6 +5,7 @@ using VillageSmartPOS.ViewModels;
 using VillageSmartPOS.Services;
 using VillageSmartPOS.Models;
 using System;
+using System.Windows.Input; // Added for KeyEventArgs
 
 namespace VillageSmartPOS.Views
 {
@@ -21,6 +22,9 @@ namespace VillageSmartPOS.Views
             _receiptViewModel = receiptViewModel;
             _dbService = new DatabaseService();
             ReceiptContent.Content = _receiptView;
+            
+            // Auto-focus on Print Bill button when window opens
+            Loaded += (s, e) => PrintBillButton.Focus();
         }
 
         private void Print_Click(object sender, RoutedEventArgs e)
@@ -185,6 +189,34 @@ namespace VillageSmartPOS.Views
         private void Close_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        // Keyboard Navigation
+        private void BillReceiptPreview_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Tab:
+                    // Focus Print Bill button
+                    PrintBillButton.Focus();
+                    e.Handled = true;
+                    break;
+
+                case Key.Escape:
+                    // Close window
+                    Close();
+                    e.Handled = true;
+                    break;
+
+                case Key.Enter:
+                    // If Print Bill button is focused, execute print
+                    if (PrintBillButton.IsFocused)
+                    {
+                        Print_Click(sender, e);
+                        e.Handled = true;
+                    }
+                    break;
+            }
         }
     }
 }

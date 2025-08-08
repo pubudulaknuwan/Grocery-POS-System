@@ -127,6 +127,12 @@ namespace VillageSmartPOS.ViewModels
         public ICommand AddProductCommand { get; }
         public ICommand ClearFormCommand { get; }
 
+        // Delegate for resetting form ComboBoxes
+        public Action? ResetFormComboBoxes { get; set; }
+
+        // Delegate for focusing Product Name field after form clear
+        public Action? FocusProductNameField { get; set; }
+
         public ProductViewModel()
         {
             AddProductCommand = new RelayCommand(AddProduct);
@@ -195,6 +201,12 @@ namespace VillageSmartPOS.ViewModels
 
                 // Clear inputs
                 ClearForm();
+                
+                // Reset form ComboBoxes
+                ResetFormComboBoxes?.Invoke();
+                
+                // Focus Product Name field for next entry
+                FocusProductNameField?.Invoke();
             }
             catch (InvalidOperationException ex)
             {
@@ -221,6 +233,9 @@ namespace VillageSmartPOS.ViewModels
             Supplier = string.Empty;
             Description = string.Empty;
             ReorderLevel = 10;
+            
+            // Notify UI that UnitMeasureOptions have changed
+            OnPropertyChanged(nameof(UnitMeasureOptions));
         }
     }
 }

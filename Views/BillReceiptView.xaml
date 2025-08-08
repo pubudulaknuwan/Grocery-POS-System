@@ -49,21 +49,26 @@
 
             <!-- Items Section - Optimized for 80mm thermal printer -->
             <StackPanel Margin="0,8,0,0">
-                <!-- Header -->
+                <!-- Header - Tightly packed without gaps -->
                 <Grid Background="#F8F9FA" Margin="0,0,0,5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="45"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>   <!-- Item name - even more compact -->
+                        <ColumnDefinition Width="55"/>   <!-- Quantity - smaller -->
+                        <ColumnDefinition Width="50"/>   <!-- Marked Price - smaller -->
+                        <ColumnDefinition Width="50"/>   <!-- Our Price - smaller -->
+                        <ColumnDefinition Width="50"/>   <!-- Total - smaller -->
                     </Grid.ColumnDefinitions>
                     
-                    <TextBlock Grid.Column="0" Text="අයිතම" FontWeight="Bold" FontSize="11"/>
-                    <TextBlock Grid.Column="1" Text="ප්‍රමානය" FontWeight="Bold" FontSize="10" HorizontalAlignment="Center" TextWrapping="Wrap"/>
-                    <TextBlock Grid.Column="2" Text="සදහන්&#x0D;&#x0A;මිල" FontWeight="Bold" FontSize="9" HorizontalAlignment="Right" TextWrapping="Wrap"/>
-                    <TextBlock Grid.Column="3" Text="අපේ&#x0D;&#x0A;මිල" FontWeight="Bold" FontSize="9" HorizontalAlignment="Right" TextWrapping="Wrap"/>
-                    <TextBlock Grid.Column="4" Text="දල&#x0D;&#x0A;එකතුව" FontWeight="Bold" FontSize="10" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Column="0" Text="අයිතම" FontWeight="Bold" FontSize="10" 
+                               TextAlignment="Left"/>
+                    <TextBlock Grid.Column="1" Text="ප්‍රමානය" FontWeight="Bold" FontSize="9" 
+                               HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Column="2" Text="සදහන් මිල" FontWeight="Bold" FontSize="9" 
+                               HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Column="3" Text="අපේ මිල" FontWeight="Bold" FontSize="9" 
+                               HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Column="4" Text="එකතුව" FontWeight="Bold" FontSize="9" 
+                               HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </Grid>
                 
                 <!-- Items List -->
@@ -72,40 +77,46 @@
                         <DataTemplate>
                             <Border BorderBrush="#E9ECEF" BorderThickness="0,0,0,1" Margin="0,4">
                                 <StackPanel>
-                                    <!-- Item Name and Prices Row -->
-                                    <Grid>
+                                    <!-- Item Name Row - Full width -->
+                                    <TextBlock Text="{Binding Name}" 
+                                               FontWeight="SemiBold" FontSize="11" 
+                                               TextWrapping="Wrap" Margin="0,2,0,4"
+                                               Foreground="#2C3E50"/>
+                                    
+                                    <!-- Item Details Row - Aligned under headers -->
+                                    <Grid Margin="0,0,0,2">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="45"/>
-                                            <ColumnDefinition Width="50"/>
-                                            <ColumnDefinition Width="50"/>
-                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition Width="50"/>   <!-- Item name (empty) -->
+                                            <ColumnDefinition Width="55"/>   <!-- Quantity -->
+                                            <ColumnDefinition Width="50"/>   <!-- Marked Price -->
+                                            <ColumnDefinition Width="50"/>   <!-- Our Price -->
+                                            <ColumnDefinition Width="50"/>   <!-- Total -->
                                         </Grid.ColumnDefinitions>
                                         
-                                        <!-- Item Name -->
-                                        <TextBlock Grid.Column="0" Text="{Binding Name}" 
-                                                   FontWeight="SemiBold" FontSize="12" TextWrapping="Wrap"/>
-                                        
-                                        <!-- Quantity - Single line format -->
+                                        <!-- Quantity -->
                                         <TextBlock Grid.Column="1" Text="{Binding FormattedQuantity}" 
-                                                   HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="12"/>
+                                                   HorizontalAlignment="Center" FontWeight="SemiBold" FontSize="11"
+                                                   TextWrapping="NoWrap" VerticalAlignment="Center"
+                                                   Foreground="#666"/>
                                         
                                         <!-- Marked Price -->
                                         <TextBlock Grid.Column="2" Text="{Binding FormattedMarkedPrice}" 
                                                    FontSize="11" Foreground="#FF6B35" 
-                                                   TextDecorations="Strikethrough" HorizontalAlignment="Right"/>
+                                                   TextDecorations="Strikethrough" HorizontalAlignment="Center"
+                                                   TextWrapping="NoWrap" VerticalAlignment="Center"/>
                                         
                                         <!-- Our Price -->
                                         <TextBlock Grid.Column="3" Text="{Binding FormattedPrice}" 
                                                    FontSize="11" Foreground="#4CAF50" FontWeight="Bold" 
-                                                   HorizontalAlignment="Right"/>
+                                                   HorizontalAlignment="Center" TextWrapping="NoWrap"
+                                                   VerticalAlignment="Center"/>
                                         
                                         <!-- Total -->
                                         <TextBlock Grid.Column="4" Text="{Binding FormattedTotal}" 
-                                                   FontWeight="Bold" HorizontalAlignment="Right" FontSize="12"/>
+                                                   FontWeight="Bold" HorizontalAlignment="Center" FontSize="11"
+                                                   TextWrapping="NoWrap" VerticalAlignment="Center"
+                                                   Foreground="#2C3E50"/>
                                     </Grid>
-                                    
-                                    <!-- Savings Row - Removed for cleaner bill display -->
                                 </StackPanel>
                             </Border>
                         </DataTemplate>

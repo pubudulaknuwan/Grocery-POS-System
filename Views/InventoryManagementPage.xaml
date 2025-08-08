@@ -61,14 +61,15 @@
                         </Border>
 
                         <!-- Product List with ScrollViewer -->
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0" MaxHeight="700">
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Margin="0,0,0,0" MaxHeight="700" x:Name="ProductsScrollViewer">
                             <DataGrid ItemsSource="{Binding Products}" SelectedItem="{Binding SelectedProduct}" 
                                       AutoGenerateColumns="False" GridLinesVisibility="Horizontal" 
                                       CanUserAddRows="False" CanUserDeleteRows="False" 
                                       SelectionMode="Single"
                                       Background="{DynamicResource CardBackground}"
                                       BorderBrush="{DynamicResource BorderColor}"
-                                      Style="{DynamicResource ModernDataGrid}">
+                                      Style="{DynamicResource ModernDataGrid}"
+                                      PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                 <DataGrid.Resources>
                                     <!-- DataGrid Header Style -->
                                     <Style TargetType="DataGridColumnHeader">
@@ -266,9 +267,10 @@
                                         <StackPanel>
                                             <TextBlock Text="📏 Unit Type" FontWeight="SemiBold" Margin="0,0,0,3" 
                                                        Foreground="{DynamicResource PrimaryText}" FontSize="11"/>
-                                            <ComboBox x:Name="ProductUnitTypeComboBox" SelectedValue="{Binding ProductUnitType}" 
+                                            <ComboBox x:Name="ProductUnitTypeComboBox" 
                                                       FontSize="11" Padding="6,4" BorderThickness="0"
-                                                      Background="Transparent" Foreground="{DynamicResource PrimaryText}">
+                                                      Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                      SelectionChanged="ProductUnitTypeComboBox_SelectionChanged">
                                                 <ComboBoxItem Content="Units (pieces/bottles)" Tag="unit"/>
                                                 <ComboBoxItem Content="Mass (kg/g)" Tag="mass"/>
                                             </ComboBox>
@@ -280,20 +282,10 @@
                                         <StackPanel>
                                             <TextBlock Text="📐 Unit Measure" FontWeight="SemiBold" Margin="0,0,0,3" 
                                                        Foreground="{DynamicResource PrimaryText}" FontSize="11"/>
-                                            <ComboBox x:Name="ProductUnitMeasureComboBox" SelectedValue="{Binding ProductUnitMeasure}" 
+                                            <ComboBox x:Name="ProductUnitMeasureComboBox" 
                                                       FontSize="11" Padding="6,4" BorderThickness="0"
-                                                      Background="Transparent" Foreground="{DynamicResource PrimaryText}">
-                                                <ComboBoxItem Content="pieces" Tag="pieces"/>
-                                                <ComboBoxItem Content="bottles" Tag="bottles"/>
-                                                <ComboBoxItem Content="packets" Tag="packets"/>
-                                                <ComboBoxItem Content="boxes" Tag="boxes"/>
-                                                <ComboBoxItem Content="cans" Tag="cans"/>
-                                                <ComboBoxItem Content="units" Tag="units"/>
-                                                <ComboBoxItem Content="kg" Tag="kg"/>
-                                                <ComboBoxItem Content="g" Tag="g"/>
-                                                <ComboBoxItem Content="lb" Tag="lb"/>
-                                                <ComboBoxItem Content="oz" Tag="oz"/>
-                                            </ComboBox>
+                                                      Background="Transparent" Foreground="{DynamicResource PrimaryText}"
+                                                      SelectionChanged="ProductUnitMeasureComboBox_SelectionChanged"/>
                                         </StackPanel>
                                     </Border>
                                 </StackPanel>

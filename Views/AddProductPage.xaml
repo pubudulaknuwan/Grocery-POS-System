@@ -144,7 +144,7 @@
                                                       Background="Transparent" Foreground="{DynamicResource PrimaryText}"
                                                       KeyDown="TextBox_KeyDown" SelectionChanged="UnitTypeComboBox_SelectionChanged"
                                                       ToolTip="Press Enter to move to next field">
-                                                <ComboBoxItem Content="Units (pieces/bottles)" Tag="unit"/>
+                                                <ComboBoxItem Content="Units (pieces/bottles)" Tag="unit" IsSelected="True"/>
                                                 <ComboBoxItem Content="Mass (kg/g)" Tag="mass"/>
                                             </ComboBox>
                                         </StackPanel>
@@ -237,7 +237,9 @@
                                         Width="120" Height="35" 
                                         Background="{DynamicResource WarningButton}" Foreground="White"
                                         FontWeight="Bold" FontSize="12"
-                                        Style="{DynamicResource ModernButton}"/>
+                                        Style="{DynamicResource ModernButton}"
+                                        x:Name="ClearFormButton"
+                                        KeyDown="ClearFormButton_KeyDown"/>
                             </StackPanel>
                         </StackPanel>
                     </ScrollViewer>

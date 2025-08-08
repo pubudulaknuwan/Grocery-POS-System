@@ -112,6 +112,9 @@ namespace VillageSmartPOS.ViewModels
         public ICommand SelectProductCommand { get; }
         public ICommand AddManualProductCommand { get; }
 
+        // Delegate for focusing search field
+        public Action? FocusSearchField { get; set; }
+
         public SalesBillingViewModel()
         {
             AddToBillCommand = new RelayCommand(AddToBill, CanAddToBill);
@@ -264,6 +267,9 @@ namespace VillageSmartPOS.ViewModels
             OnPropertyChanged(nameof(BillItems));
             OnPropertyChanged(nameof(TotalAmount));
             StatusMessage = "Bill cleared";
+            
+            // Focus on search field after clearing bill
+            FocusSearchField?.Invoke();
         }
 
         private void RemoveItem(BillItem? item)

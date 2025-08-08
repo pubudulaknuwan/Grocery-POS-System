@@ -86,6 +86,9 @@ namespace VillageSmartPOS.Views
             TotalAmount = totalAmount;
             PaidAmount = totalAmount; // Default to exact amount
             DataContext = this;
+            
+            // Auto-focus on Confirm Cash Payment button when window opens
+            Loaded += (s, e) => ConfirmCashPaymentButton.Focus();
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -185,6 +188,40 @@ namespace VillageSmartPOS.Views
         {
             DialogResult = false;
             Close();
+        }
+
+        // Keyboard Navigation
+        private void PaymentDialog_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Tab:
+                    // Focus Confirm Cash Payment button
+                    ConfirmCashPaymentButton.Focus();
+                    e.Handled = true;
+                    break;
+
+                case Key.F3:
+                    // Focus Pay as Loan button (if visible)
+                    // Note: This would need a named button in XAML
+                    e.Handled = true;
+                    break;
+
+                case Key.Escape:
+                    // Cancel payment
+                    Cancel_Click(sender, e);
+                    e.Handled = true;
+                    break;
+
+                case Key.Enter:
+                    // If Confirm Cash Payment button is focused, execute payment
+                    if (ConfirmCashPaymentButton.IsFocused)
+                    {
+                        ConfirmCashPayment();
+                        e.Handled = true;
+                    }
+                    break;
+            }
         }
     }
 } 

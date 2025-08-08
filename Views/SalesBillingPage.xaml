@@ -8,7 +8,8 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              d:DesignHeight="600" d:DesignWidth="1000"
-             Background="{DynamicResource PrimaryBackground}">
+             Background="{DynamicResource PrimaryBackground}"
+             KeyDown="SalesBillingPage_KeyDown">
 
     <UserControl.DataContext>
         <vm:SalesBillingViewModel />
@@ -638,11 +639,12 @@
                             Height="45"/>
                     
                     <Button Content="🖨️ Print Receipt" 
-                            Style="{StaticResource BillSummaryButton}"
+                            Style="{StaticResource NavigationButton}"
                             Background="{DynamicResource WarningButton}"
                             Command="{Binding PrintCommand}"
                             MinWidth="140"
-                            Height="45"/>
+                            Height="45"
+                            x:Name="PrintReceiptButton"/>
                 </StackPanel>
             </Grid>
         </Border>

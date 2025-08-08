@@ -48,7 +48,20 @@ namespace VillageSmartPOS.Views
             InitializeComponent();
             
             // Ensure the search textbox gets focus when the page loads
-            Loaded += (s, e) => SearchTextBox.Focus();
+            Loaded += (s, e) => 
+            {
+                SearchTextBox.Focus();
+                
+                // Set up the delegate to focus search field after clearing bill
+                if (DataContext is SalesBillingViewModel viewModel)
+                {
+                    viewModel.FocusSearchField = () => 
+                    {
+                        SearchTextBox.Focus();
+                        SearchTextBox.SelectAll();
+                    };
+                }
+            };
         }
 
         private void SearchTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -92,6 +105,7 @@ namespace VillageSmartPOS.Views
                 NavigateSuggestions(-1);
                 e.Handled = true;
             }
+            // Don't handle Right Arrow here - let it pass through to page-level handler
         }
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -126,6 +140,7 @@ namespace VillageSmartPOS.Views
                     return;
                 }
             }
+            // Don't handle Right Arrow here - let it pass through to page-level handler
         }
 
         private void SearchTextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -185,6 +200,7 @@ namespace VillageSmartPOS.Views
                 NavigateSuggestions(-1);
                 e.Handled = true;
             }
+            // Don't handle Right Arrow here - let it pass through to page-level handler
         }
 
         private void SelectHighlightedSuggestion()
@@ -356,6 +372,47 @@ namespace VillageSmartPOS.Views
                     ManualProductNameTextBox.Focus();
                 }
                 e.Handled = true;
+            }
+        }
+
+        // Keyboard Navigation for the entire page
+        private void SalesBillingPage_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.F1:
+                    // Focus search field
+                    SearchTextBox.Focus();
+                    SearchTextBox.SelectAll();
+                    e.Handled = true;
+                    break;
+
+                case Key.Tab:
+                    // Focus Print Receipt button
+                    PrintReceiptButton.Focus();
+                    e.Handled = true;
+                    break;
+
+                case Key.F3:
+                    // Focus Add Manual Product button
+                    AddManualProductButton?.Focus();
+                    e.Handled = true;
+                    break;
+
+                case Key.Escape:
+                    // Clear current input
+                    if (SearchTextBox.IsFocused)
+                    {
+                        SearchTextBox.Text = string.Empty;
+                        SearchTextBox.Focus();
+                    }
+                    else if (QuantityTextBox.IsFocused)
+                    {
+                        QuantityTextBox.Text = "1";
+                        QuantityTextBox.Focus();
+                    }
+                    e.Handled = true;
+                    break;
             }
         }
     }

@@ -75,6 +75,20 @@
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter Property="Background" Value="{DynamicResource WarningButton}"/>
                             </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource SuccessButton}"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource PrimaryButton}"/>
+                                <Setter Property="BorderThickness" Value="3"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="Black" 
+                                                        Direction="270" 
+                                                        ShadowDepth="8" 
+                                                        BlurRadius="20" 
+                                                        Opacity="0.3"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -95,6 +109,56 @@
             <Setter Property="SelectionUnit" Value="FullRow"/>
             <Setter Property="RowBackground" Value="{DynamicResource CardBackground}"/>
             <Setter Property="AlternatingRowBackground" Value="{DynamicResource SecondaryBackground}"/>
+        </Style>
+        
+        <!-- Navigation Button Style - Enhanced focus for keyboard navigation -->
+        <Style x:Key="NavigationButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Effect="{DynamicResource ModernCardShadow}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"
+                                            Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource SuccessButton}"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="Black" 
+                                                        Direction="270" 
+                                                        ShadowDepth="5" 
+                                                        BlurRadius="15" 
+                                                        Opacity="0.2"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource WarningButton}"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource SuccessButton}"/>
+                                <Setter Property="BorderBrush" Value="White"/>
+                                <Setter Property="BorderThickness" Value="4"/>
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="White" 
+                                                        Direction="270" 
+                                                        ShadowDepth="10" 
+                                                        BlurRadius="25" 
+                                                        Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
         
     </Application.Resources>

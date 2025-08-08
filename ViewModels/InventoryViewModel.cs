@@ -125,6 +125,9 @@ namespace VillageSmartPOS.ViewModels
         public ICommand ShowLowStockCommand { get; }
         public ICommand LoadDetailsCommand { get; }
 
+        // Delegate for setting ComboBox selections
+        public Action<string, string>? SetComboBoxSelections { get; set; }
+
         public InventoryViewModel()
         {
             RefreshCommand = new RelayCommand(LoadProducts);
@@ -217,6 +220,9 @@ namespace VillageSmartPOS.ViewModels
                 ProductReorderLevel = SelectedProduct.ReorderLevel;
                 ProductUnitType = SelectedProduct.UnitType;
                 ProductUnitMeasure = SelectedProduct.UnitMeasure;
+                
+                // Set ComboBox selections
+                SetComboBoxSelections?.Invoke(SelectedProduct.UnitType, SelectedProduct.UnitMeasure);
             }
             catch (Exception ex)
             {

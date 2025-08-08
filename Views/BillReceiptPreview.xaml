@@ -7,13 +7,15 @@
         MinHeight="500"
         MinWidth="300"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="CanResize">
+        ResizeMode="CanResize"
+        KeyDown="BillReceiptPreview_KeyDown">
 
     <DockPanel LastChildFill="True" Background="White" Margin="8">
 
         <!-- Buttons - Fixed at top for better visibility -->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,8">
             <Button Content="🖨 Print Bill"
+                    Style="{StaticResource NavigationButton}"
                     Width="120"
                     Height="35"
                     Margin="4,0"
@@ -21,7 +23,8 @@
                     Background="#FF007ACC"
                     Foreground="White"
                     FontWeight="Bold"
-                    FontSize="11"/>
+                    FontSize="11"
+                    x:Name="PrintBillButton"/>
 
             <Button Content="❌ Close"
                     Width="120"
@@ -31,7 +34,8 @@
                     Background="Gray"
                     Foreground="White"
                     FontWeight="Bold"
-                    FontSize="11"/>
+                    FontSize="11"
+                    x:Name="CloseButton"/>
         </StackPanel>
 
         <!-- Scrollable receipt preview -->
